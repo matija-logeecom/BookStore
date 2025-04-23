@@ -1,17 +1,27 @@
 <?php
 include "data.php";
 
-$authorId = (int)$_GET['id'] ?? 0;
-$fullName = current(array_filter($authors, fn($author) => $author['id'] === $authorId))['name'] ?? null;
+$bookId = (int)$_GET['book_id'] ?? 0;
+$title = current(array_filter(array_merge(...$books), fn($book) => $book['id'] === $bookId))['title'] ?? '';
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $action = $_POST["action"] ?? '';
 
+    $authorId = 0;
+    foreach ($books as $id => $authorBooks) {
+        foreach ($authorBooks as $b) {
+            if ($b['id'] === $bookId) {
+                $authorId = $id;
+                break;
+            }
+        }
+    }
+
     if ($action === 'delete') {
         // delete logic
-        header("Location: index.php");
+        header("Location: booklist.php?author_id=$authorId");
     } elseif ($action === 'cancel') {
-        header("Location: index.php");
+        header("Location: booklist.php?author_id=$authorId");
     }
 
 }
@@ -116,7 +126,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <h2>Delete Author</h2>
         </div>
         <div class="modal-body">
-            <p>You are about to delete the author <?= htmlspecialchars($fullName) ?>. If you proceed with this action, the application will permanently delete all books related to this author.</p>
+            <p>You are about to delete the book <?= htmlspecialchars($title) ?>. If you proceed with this action, the application will permanently delete this book from the database.</p>
         </div>
         <form method="POST">
             <fieldset class="modal-footer">
