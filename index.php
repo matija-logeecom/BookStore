@@ -11,7 +11,7 @@
         .actions { display: flex; gap: 10px; }
         a.button { text-decoration: none; padding: 5px 10px; border-radius: 4px; }
         .edit { background-color: #5cacee; color: white; }
-        .delete { background-color: #ee5c5c; color: white; }
+        .delete { background-color: #000000; color: white; }
         .add { display: block; text-align: center; margin: 20px; font-size: 42px; text-decoration: none; }
     </style>
 </head>
@@ -32,7 +32,7 @@
                 <td><?= $author['books'] ?></td>
                 <td class="actions">
                     <a class="button edit" href="edit_author.php?id=<?= $author['id'] ?>">✏️</a>
-                    <a class="button delete" href="delete_author.php?id=<?= $author['id'] ?>">🗑️</a>
+                    <a class="button delete" href="delete_author.php?id=<?= $author['id'] ?>">❌</a>
                 </td>
             </tr>
         <?php endforeach; ?>

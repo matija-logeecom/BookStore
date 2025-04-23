@@ -1,16 +1,5 @@
 <?php
-$books = [
-    1 => [ // Author ID 1
-        ['id' => 1, 'title' => 'Book Name (2001)'],
-        ['id' => 2, 'title' => 'Book Name 2 (2002)'],
-    ],
-    2 => [ // Author ID 2
-        ['id' => 3, 'title' => 'Book Name 3 (1997)'],
-    ],
-    3 => [ // Author ID 3
-        ['id' => 4, 'title' => 'Book Name 4 (2005)'],
-    ],
-];
+include "data.php";
 
 $authorId = isset($_GET['author_id']) ? (int)$_GET['author_id'] : 0;
 $authorBooks = $books[$authorId] ?? [];
