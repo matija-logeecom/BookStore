@@ -123,7 +123,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <div class="modal-content">
         <div class="modal-header">
             <span class="exclamation-icon">❗</span>
-            <h2>Delete Author</h2>
+            <h2>Delete Book</h2>
         </div>
         <div class="modal-body">
             <p>You are about to delete the book <?= htmlspecialchars($title) ?>. If you proceed with this action, the application will permanently delete this book from the database.</p>
