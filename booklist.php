@@ -69,7 +69,12 @@ $authorBooks = $books[$authorId] ?? [];
         <tbody>
             <?php foreach ($authorBooks as $authorBook): ?>
                 <tr>
-                    <td><?= htmlspecialchars($authorBook['title']) ?></td>
+                    <td>
+                        <b>
+                            <?= htmlspecialchars($authorBook['title']) ?>
+                            (<?= htmlspecialchars($authorBook['year']) ?>)
+                        </b>
+                    </td>
                     <td class="actions">
                         <a href="edit_book.php?book_id=<?= $authorBook['id'] ?>">✏️</a>
                         <a href="delete_book.php?book_id=<?= $authorBook['id'] ?>">❌</a>

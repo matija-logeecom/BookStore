@@ -9,13 +9,13 @@ $authors = [
 
 $books = [
     1 => [ // Author ID 1
-        ['id' => 1, 'title' => 'Book Name (2001)'],
-        ['id' => 2, 'title' => 'Book Name 2 (2002)'],
+        ['id' => 1, 'title' => 'Book Name', 'year' => 2001],
+        ['id' => 2, 'title' => 'Book Name 2', 'year' => 2002],
     ],
     2 => [ // Author ID 2
-        ['id' => 3, 'title' => 'Book Name 3 (1997)'],
+        ['id' => 3, 'title' => 'Book Name 3', 'year' => 1997],
     ],
     3 => [ // Author ID 3
-        ['id' => 4, 'title' => 'Book Name 4 (2005)'],
+        ['id' => 4, 'title' => 'Book Name 4', 'year' => 2005],
     ],
 ];
