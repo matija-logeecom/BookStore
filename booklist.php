@@ -1,5 +1,5 @@
 <?php
-include "data.php";
+include "includes/data.php";
 
 $authorId = isset($_GET['author_id']) ? (int)$_GET['author_id'] : 0;
 $authorBooks = $books[$authorId] ?? [];

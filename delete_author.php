@@ -1,5 +1,5 @@
 <?php
-include "data.php";
+include "includes/data.php";
 
 $authorId = (int)$_GET['id'] ?? 0;
 $fullName = current(array_filter($authors, fn($author) => $author['id'] === $authorId))['name'] ?? null;

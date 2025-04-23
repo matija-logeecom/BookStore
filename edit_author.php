@@ -1,5 +1,5 @@
 <?php
-include 'data.php';
+include 'includes/data.php';
 
 $errors = [];
 $authorId = (int)($_GET['id'] ?? 0);
