@@ -1,10 +1,16 @@
-<?php include 'includes/data.php'; ?>
+<?php
+session_start();
+#include 'includes/data.php';
+
+$_SESSION['authors'] = $_SESSION['authors'] ?? [];
+$_SESSION['currentId'] = $_SESSION['currentId'] ?? 1;
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Author List</title>
-    <link rel="stylesheet" href="./style/index.css">
+    <link rel="stylesheet" href="style/tables.css">
 </head>
 <body>
 <div class="container">
@@ -17,7 +23,7 @@
         </tr>
         </thead>
         <tbody>
-        <?php foreach ($authors as $author): ?>
+        <?php foreach ($_SESSION['authors'] as $author): ?>
             <tr>
                 <td>
                     <div class="author-name">

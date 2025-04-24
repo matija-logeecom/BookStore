@@ -30,7 +30,7 @@ td {
     border-bottom: none;
 }
 
-.author-col {
+.author-col, .book-col{
     width: 60%;
 }
 .books-col, .actions-col {
