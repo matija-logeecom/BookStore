@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <head>
     <meta charset="UTF-8">
     <title>Create Author</title>
-    <link rel="stylesheet" href="./style/create_author.css"/>
+    <link rel="stylesheet" href="style/author_form.css"/>
 </head>
 <body>
 <div class="form-wrapper">

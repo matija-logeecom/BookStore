@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $newFirstName = trim($_POST["first_name"] ?? '');
     $newLastName = trim($_POST["last_name"] ?? '');
 
-    if (checkError($errors, $firstName, $lastName)) {
+    if (checkError($errors, $newFirstName, $newLastName)) {
         changeAuthorName($_SESSION['authors'], $authorId, $newFirstName, $newLastName);
         header('Location: index.php');
         exit;
@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <head>
     <meta charset="UTF-8">
     <title>Edit Author</title>
-    <link rel="stylesheet" href="./style/create_author.css"/>
+    <link rel="stylesheet" href="style/author_form.css"/>
 </head>
 <body>
 <div class="form-wrapper">

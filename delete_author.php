@@ -1,14 +1,17 @@
 <?php
+session_start();
+
 include "includes/data.php";
+include "includes/functions.php";
 
 $authorId = (int)$_GET['id'] ?? 0;
-$fullName = current(array_filter($authors, fn($author) => $author['id'] === $authorId))['name'] ?? null;
+$fullName = current(array_filter($_SESSION['authors'], fn($author) => $author['id'] === $authorId))['name'] ?? null;
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $action = $_POST["action"] ?? '';
 
     if ($action === 'delete') {
-        // delete logic
+        removeAuthor($_SESSION['authors'], $authorId);
         header("Location: index.php");
     } elseif ($action === 'cancel') {
         header("Location: index.php");
@@ -21,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <head>
     <meta charset="UTF-8">
     <title>Delete Author</title>
-    <link rel="stylesheet" href="./style/delete_author.css"/>
+    <link rel="stylesheet" href="./style/delete_item.css"/>
 </head>
 <body>
 <div id="deleteConfirmationDialog" class="modal">

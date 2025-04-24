@@ -30,3 +30,10 @@ function changeAuthorName(&$authors, $authorId, $newFirstName, $newLastName): vo
         $authors[$index]['name'] = $newFirstName . ' ' . $newLastName;
     }
 }
+
+function removeAuthor(&$authors, $authorId): void {
+    $index = findAuthorById($authors, $authorId);
+    if ($index !== null) {
+        unset($authors[$index]);
+    }
+}
