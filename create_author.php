@@ -1,6 +1,8 @@
 <?php
 session_start();
 
+include "includes/functions.php";
+
 $errors['firstName'] = '';
 $errors['lastName'] = '';
 $firstName = '';
@@ -10,21 +12,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $firstName = trim($_POST["first_name"] ?? '');
     $lastName = trim($_POST["last_name"] ?? '');
 
-    if ($firstName === '') {
-        $errors['firstName'] = "* This field is required";
-    } elseif (strlen($firstName) > 100) {
-        $errors['firstName'] = "First name must be <= 100 characters";
-    }
-
-    if ($lastName === '') {
-        $errors['lastName'] = "* This field is required";
-    } elseif (strlen($lastName) > 100) {
-        $errors['lastName'] = "Last name must be <= 100 characters";
-    }
-
-    if (!$errors) {
+    if (checkError($errors, $firstName, $lastName)) {
         $_SESSION['authors'][] = ['id' => $_SESSION['currentId'], 'name' => $firstName . ' ' . $lastName, 'books' => 0];
-        $_SESSION['currentId'] =+ 1;
+        $_SESSION['currentId'] += 1;
         header('Location: index.php');
         exit;
     }
