@@ -11,54 +11,9 @@ $authorBooks = $books[$authorId] ?? [];
 <head>
     <meta charset="UTF-8">
     <title>Booklist</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-        }
-
-        h1 {
-            text-align: center;
-        }
-
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            max-width: 800px;
-            margin: auto;
-        }
-
-        th, td {
-            padding: 12px 16px;
-            text-align: left;
-            border-bottom: 1px solid #ccc;
-        }
-
-        th {
-            background-color: #f8f8f8;
-        }
-
-        .actions {
-            white-space: nowrap;
-        }
-
-        .actions a {
-            margin-right: 10px;
-            text-decoration: none;
-            font-size: 1.2em;
-        }
-
-        .create-button {
-            font-size: 2em;
-            display: block;
-            margin: 20px auto;
-            text-align: center;
-            text-decoration: none;
-        }
-    </style>
+    <link rel="stylesheet" href="./style/booklist.css"/>
 </head>
 <body>
-    <h1>Booklist</h1>
     <table>
         <thead>
         <tr>
