@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     if (!$errors) {
-        header('Location: index.php');
+        header('Location: authors.phtml');
         exit;
     }
 }
@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <head>
     <meta charset="UTF-8">
     <title>Create Book</title>
-    <link rel="stylesheet" href="./style/create_book.css"/>
+    <link rel="stylesheet" href="../public/style/create_book.css"/>
 </head>
 <body>
 <div class="form-wrapper">

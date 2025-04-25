@@ -1,32 +1,9 @@
-<?php
-session_start();
-
-include "includes/functions.php";
-
-$errors['firstName'] = '';
-$errors['lastName'] = '';
-$firstName = '';
-$lastName = '';
-
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $firstName = trim($_POST["first_name"] ?? '');
-    $lastName = trim($_POST["last_name"] ?? '');
-
-    if (checkError($errors, $firstName, $lastName)) {
-        $_SESSION['authors'][] = ['id' => $_SESSION['currentId'], 'name' => $firstName . ' ' . $lastName, 'books' => 0];
-        $_SESSION['currentId'] += 1;
-        header('Location: index.php');
-        exit;
-    }
-}
-?>
-
 <!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Create Author</title>
-    <link rel="stylesheet" href="style/author_form.css"/>
+    <link rel="stylesheet" href="/public/style/author_form.css"/>
 </head>
 <body>
 <div class="form-wrapper">

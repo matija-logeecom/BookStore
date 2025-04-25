@@ -1,36 +1,9 @@
-<?php
-session_start();
-include 'includes/data.php';
-include 'includes/functions.php';
-
-$errors['firstName'] = '';
-$errors['lastName'] = '';
-
-$authorId = (int)($_GET['id'] ?? 0);
-
-$author = current(array_filter($_SESSION['authors'], fn($a) => $a['id'] === $authorId)) ?? null;
-$firstAndLastName = explode(' ', $author['name']);
-$firstName = $firstAndLastName[0];
-$lastName = $firstAndLastName[1];
-
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $newFirstName = trim($_POST["first_name"] ?? '');
-    $newLastName = trim($_POST["last_name"] ?? '');
-
-    if (checkError($errors, $newFirstName, $newLastName)) {
-        changeAuthorName($_SESSION['authors'], $authorId, $newFirstName, $newLastName);
-        header('Location: index.php');
-        exit;
-    }
-}
-?>
-
 <!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Edit Author</title>
-    <link rel="stylesheet" href="style/author_form.css"/>
+    <link rel="stylesheet" href="/public/style/author_form.css"/>
 </head>
 <body>
 <div class="form-wrapper">

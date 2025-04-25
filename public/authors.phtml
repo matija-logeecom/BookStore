@@ -1,16 +1,9 @@
-<?php
-session_start();
-#include 'includes/data.php';
-
-$_SESSION['authors'] = $_SESSION['authors'] ?? [];
-$_SESSION['currentId'] = $_SESSION['currentId'] ?? 1;
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Author List</title>
-    <link rel="stylesheet" href="style/tables.css">
+    <link rel="stylesheet" href="/public/style/tables.css">
 </head>
 <body>
 <div class="container">
@@ -28,9 +21,9 @@ $_SESSION['currentId'] = $_SESSION['currentId'] ?? 1;
                 <td>
                     <div class="author-name">
                         <div class="user-image">
-                            <img src="./images/user.png" alt="user">
+                            <img src="/public/images/user.png" alt="user">
                         </div>
-                        <a href="booklist.php?author_id=<?= $author['id'] ?>">
+                        <a href="../src/booklist.php?author_id=<?= $author['id'] ?>">
                             <b><?= htmlspecialchars($author['name']) ?></b>
                         </a>
                     </div>
@@ -40,11 +33,11 @@ $_SESSION['currentId'] = $_SESSION['currentId'] ?? 1;
                 </td>
                 <td class="actions-col">
                     <div class="actions">
-                        <a class="button edit" href="edit_author.php?id=<?= $author['id'] ?>">
-                            <img src="./images/pen.png" alt="pen">
+                        <a class="button edit" href="/src/index.php?action=editAuthor&id=<?= $author['id'] ?>">
+                            <img src="/public/images/pen.png" alt="pen">
                         </a>
-                        <a class="button delete" href="delete_author.php?id=<?= $author['id'] ?>">
-                            <img src="./images/minus.png" alt="minus">
+                        <a class="button delete" href="/src/index.php?action=deleteAuthor&id=<?= $author['id'] ?>">
+                            <img src="/public/images/minus.png" alt="minus">
                         </a>
                     </div>
                 </td>
@@ -54,8 +47,8 @@ $_SESSION['currentId'] = $_SESSION['currentId'] ?? 1;
     </table>
 </div>
 <div class="add-container">
-    <a class="add" href="create_author.php">
-        <img src="./images/add.png" alt="add" class="add-image">
+    <a class="add" href="/src/index.php?action=createAuthor">
+        <img src="/public/images/add.png" alt="add" class="add-image">
     </a>
 </div>
 </body>

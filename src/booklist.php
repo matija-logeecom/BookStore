@@ -10,7 +10,7 @@ $authorBooks = $books[$authorId] ?? [];
 <head>
     <meta charset="UTF-8">
     <title>Book List</title>
-    <link rel="stylesheet" href="style/tables.css"/>
+    <link rel="stylesheet" href="../public/style/tables.css"/>
 </head>
 <body>
 <div class="container">
@@ -30,10 +30,10 @@ $authorBooks = $books[$authorId] ?? [];
                 <td class="actions-col">
                     <div class="actions">
                         <a class="button edit" href="edit_book.php?book_id=<?= $authorBook['id'] ?>">
-                            <img src="./images/pen.png" alt="pen">
+                            <img src="../public/images/pen.png" alt="pen">
                         </a>
                         <a class="button delete" href="delete_book.php?book_id=<?= $authorBook['id'] ?>">
-                            <img src="./images/minus.png" alt="minus">
+                            <img src="../public/images/minus.png" alt="minus">
                         </a>
                     </div>
                 </td>
@@ -45,7 +45,7 @@ $authorBooks = $books[$authorId] ?? [];
 
 <div class="add-container">
     <a class="add" href="create_book.php?author_id=<?= $authorId ?>">
-        <img src="./images/add.png" alt="add" class="add-image">
+        <img src="../public/images/add.png" alt="add" class="add-image">
     </a>
 </div>
 </body>
