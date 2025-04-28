@@ -1,48 +1,103 @@
 <?php
 require_once __DIR__ . "/../repository/AuthorRepository.php";
+
 class AuthorService
 {
-    private AuthorRepository $repo;
+    private AuthorRepository $repository;
 
     public function __construct()
     {
-        $this->repo = new AuthorRepository();
+        $this->repository = new AuthorRepository();
     }
 
-    public function getAuthorList(): array {
-        return $this->repo->getAll();
+    /**
+     * @return array
+     */
+    public function getAuthorList(): array
+    {
+        return $this->repository->getAll();
     }
 
-    public function addAuthor($firstName, $lastName): void {
+
+    /**
+     * @param $firstName
+     * @param $lastName
+     * @param $errors
+     *
+     * @return void
+     */
+    public function addAuthor($firstName, $lastName, &$errors): void
+    {
+        if (!$this->validateName($firstName, $lastName, $errors)) {
+            return;
+        }
+
         $fullName = $firstName . ' ' . $lastName;
-        $this->repo->addAuthor($fullName);
+        $this->repository->addAuthor($fullName);
     }
 
-    public function editAuthor($authorId, $firstName, $lastName): void {
+    /**
+     * @param $authorId
+     * @param $firstName
+     * @param $lastName
+     * @param $errors
+     *
+     * @return void
+     */
+    public function editAuthor($authorId, $firstName, $lastName, &$errors): void
+    {
+        if (!$this->validateName($firstName, $lastName, $errors)) {
+            return;
+        }
+
         $fullName = $firstName . ' ' . $lastName;
-        $this->repo->editAuthor($authorId, $fullName);
+        $this->repository->editAuthor($authorId, $fullName);
     }
 
-    public function deleteAuthor(int $authorId): void {
-        $this->repo->deleteAuthor($authorId);
+    /**
+     * @param int $authorId
+     *
+     * @return void
+     */
+    public function deleteAuthor(int $authorId): void
+    {
+        $this->repository->deleteAuthor($authorId);
     }
-    public function validateName($firstName, $lastName, &$errors): bool {
+
+
+    /**
+     * @param $id
+     *
+     * @return array|null
+     */
+    public function getAuthorById($id): ?array
+    {
+        return $this->repository->getAuthorById($id);
+    }
+
+    /**
+     * @param $firstName
+     * @param $lastName
+     * @param $errors
+     *
+     * @return bool
+     */
+    private function validateName($firstName, $lastName, &$errors): bool
+    {
         if ($firstName === '') {
             $errors['firstName'] = "* This field is required";
-        } elseif (strlen($firstName) > 100) {
+        }
+        if (strlen($firstName) > 100) {
             $errors['firstName'] = "First name must be <= 100 characters";
         }
 
         if ($lastName === '') {
             $errors['lastName'] = "* This field is required";
-        } elseif (strlen($lastName) > 100) {
+        }
+        if (strlen($lastName) > 100) {
             $errors['lastName'] = "Last name must be <= 100 characters";
         }
 
-        return ($errors['firstName'] === '' && $errors['lastName'] === '');
-    }
-
-    public function getAuthorById($id): ?array {
-        return $this->repo->getAuthorById($id);
+        return (empty($errors['firstName']) && empty($errors['lastName']));
     }
 }

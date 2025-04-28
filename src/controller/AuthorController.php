@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . "/../service/AuthorService.php";
+
 class AuthorController
 {
     private authorService $authorService;
@@ -10,59 +11,87 @@ class AuthorController
         $this->authorService = new authorService();
     }
 
-    public function listAuthors(): void {
+    /**
+     * @return void
+     */
+    public function listAuthors(): void
+    {
         $authors = $this->authorService->getAuthorList();
-        include __DIR__ . "/../../public/authors.phtml";
+        include __DIR__ . "/../../public/pages/authors.phtml";
     }
 
-    public function createAuthor(): void {
+    /**
+     * @return void
+     */
+    public function createAuthor(): void
+    {
         $errors = ['firstName' => '', 'lastName' => ''];
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $firstName = trim($_POST['first_name']) ?? '';
-            $lastName = trim($_POST['last_name']) ?? '';
-
-            if ($this->authorService->validateName($firstName, $lastName, $errors)) {
-                $this->authorService->addAuthor($firstName, $lastName);
-                header('Location: index.php?action=listAuthors');
-                exit;
-            }
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            include __DIR__ . "/../../public/pages/create_author.phtml";
+            return;
         }
 
-        include __DIR__ . "/../../public/create_author.phtml";
+        $firstName = trim($_POST['first_name']) ?? '';
+        $lastName = trim($_POST['last_name']) ?? '';
+        $this->authorService->addAuthor($firstName, $lastName, $errors);
+
+        if (!empty($errors['firstName'] || !empty($errors['lastName']))) {
+            include __DIR__ . "/../../public/pages/create_author.phtml";
+            return;
+        }
+
+        header('Location: index.php');
     }
 
-    public function editAuthor(int $id): void {
+    /**
+     * @param int $id
+     *
+     * @return void
+     */
+    public function editAuthor(int $id): void
+    {
         $errors = ['firstName' => '', 'lastName' => ''];
         $firstName = $lastName = '';
         $author = $this->authorService->getAuthorById($id);
-        if(!$author) {
+        if (!$author) {
             header('Location: index.php');
         }
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $firstName = trim($_POST['first_name']) ?? '';
-            $lastName = trim($_POST['last_name']) ?? '';
-
-            if ($this->authorService->validateName($firstName, $lastName, $errors)) {
-                $this->authorService->editAuthor($id, $firstName, $lastName);
-
-                header('Location: index.php');
-            }
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            include __DIR__ . "/../../public/pages/edit_author.phtml";
+            return;
         }
 
-        include __DIR__ . "/../../public/edit_author.phtml";
+        $firstName = trim($_POST['first_name']) ?? '';
+        $lastName = trim($_POST['last_name']) ?? '';
+        $this->authorService->editAuthor($id, $firstName, $lastName, $errors);
+
+        if (!empty($errors['firstName'] || !empty($errors['lastName']))) {
+            include __DIR__ . "/../../public/pages/edit_author.phtml";
+            return;
+        }
+
+        header('Location: index.php');
+
     }
 
-    public function deleteAuthor(int $id): void {
+    /**
+     * @param int $id
+     *
+     * @return void
+     */
+    public function deleteAuthor(int $id): void
+    {
         $fullName = $this->authorService->getAuthorById($id)['name'] ?? '';
-        if($_SERVER['REQUEST_METHOD'] === 'POST') {
-            if ($_POST['action'] === 'delete') {
-                $this->authorService->deleteAuthor($id);
-            }
-            header('Location: index.php');
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            include __DIR__ . "/../../public/pages/delete_author.phtml";
+            return;
+        }
+        if ($_POST['action'] === 'delete') {
+            $this->authorService->deleteAuthor($id);
         }
 
-        include __DIR__ . "/../../public/delete_author.phtml";
+        header('Location: index.php');
     }
 }

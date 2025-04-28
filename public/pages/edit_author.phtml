@@ -2,25 +2,25 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Create Author</title>
-    <link rel="stylesheet" href="/public/style/author_form.css"/>
+    <title>Edit Author</title>
+    <link rel="stylesheet" href="../style/author_form.css"/>
 </head>
 <body>
 <div class="form-wrapper">
     <form method="POST">
         <fieldset>
-            <div class="legend-div">Author Create</div>
+            <div class="legend-div">Author Edit (<?= $author['id'] ?>)</div>
 
             <label for="first_name">First name</label>
             <input type="text" id="first_name" name="first_name" value="<?= htmlspecialchars($firstName); ?>">
             <?php if ($errors['firstName'] !== ''): ?>
-                <span class="error"><?= htmlspecialchars($errors['firstName']) ?></span>
+                <div class="error"><?= htmlspecialchars($errors['firstName']) ?></div>
             <?php endif; ?>
 
             <label for="last_name">Last name</label>
             <input type="text" id="last_name" name="last_name" value="<?= htmlspecialchars($lastName); ?>">
             <?php if ($errors['lastName'] !== ''): ?>
-                <span class="error"><?= htmlspecialchars($errors['lastName']) ?></span>
+                <div class="error"><?= htmlspecialchars($errors['lastName']) ?></div>
             <?php endif; ?>
 
             <div class="button-div">
