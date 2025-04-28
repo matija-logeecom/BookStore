@@ -9,6 +9,8 @@ class AuthorRepository
     }
 
     /**
+     * Retrieves a list of all authors in current session
+     *
      * @return array
      */
     public function getAll(): array
@@ -17,6 +19,8 @@ class AuthorRepository
     }
 
     /**
+     * Adds an author with provided name to current session
+     *
      * @param $fullName
      *
      * @return void
@@ -27,6 +31,8 @@ class AuthorRepository
     }
 
     /**
+     * Changes name of author with provided id to provided name
+     *
      * @param $authorId
      * @param $fullName
      *
@@ -39,6 +45,8 @@ class AuthorRepository
     }
 
     /**
+     * Deletes an author with provided id from current session
+     *
      * @param int $authorId
      *
      * @return void
@@ -50,6 +58,8 @@ class AuthorRepository
 
 
     /**
+     * Retrieves an author with provided id from current session
+     *
      * @param int $authorId
      *
      * @return array|null
@@ -60,6 +70,8 @@ class AuthorRepository
     }
 
     /**
+     * Retrieves index of author with provided id from current session
+     *
      * @param $authorId
      *
      * @return int|null

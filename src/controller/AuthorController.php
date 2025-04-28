@@ -12,6 +12,8 @@ class AuthorController
     }
 
     /**
+     * Shows all authors on page
+     *
      * @return void
      */
     public function listAuthors(): void
@@ -21,6 +23,8 @@ class AuthorController
     }
 
     /**
+     * Adds an author to current session
+     *
      * @return void
      */
     public function createAuthor(): void
@@ -45,6 +49,8 @@ class AuthorController
     }
 
     /**
+     * Changes author name with provided id in current session
+     *
      * @param int $id
      *
      * @return void
@@ -77,6 +83,8 @@ class AuthorController
     }
 
     /**
+     * Deletes an author with provided id from current session
+     *
      * @param int $id
      *
      * @return void

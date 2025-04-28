@@ -11,6 +11,8 @@ class AuthorService
     }
 
     /**
+     * Retrieves a list of all authors in current session
+     *
      * @return array
      */
     public function getAuthorList(): array
@@ -20,6 +22,8 @@ class AuthorService
 
 
     /**
+     * Adds an author with provided name to current session
+     *
      * @param $firstName
      * @param $lastName
      * @param $errors
@@ -37,6 +41,8 @@ class AuthorService
     }
 
     /**
+     * Changes name of author with provided id to provided name
+     *
      * @param $authorId
      * @param $firstName
      * @param $lastName
@@ -55,6 +61,8 @@ class AuthorService
     }
 
     /**
+     * Deletes an author with provided id from current session
+     *
      * @param int $authorId
      *
      * @return void
@@ -66,6 +74,8 @@ class AuthorService
 
 
     /**
+     * Returns an author with provided id
+     *
      * @param $id
      *
      * @return array|null
@@ -76,6 +86,8 @@ class AuthorService
     }
 
     /**
+     * Checks whether firstName and lastName are correct and changes errors array accordingly
+     *
      * @param $firstName
      * @param $lastName
      * @param $errors
