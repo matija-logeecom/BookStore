@@ -1,9 +1,12 @@
 <?php
-require_once __DIR__ . "/../service/AuthorService.php";
+
+namespace BookStore\Controller;
+
+use BookStore\Service\AuthorService;
 
 class AuthorController
 {
-    private authorService $authorService;
+    private AuthorService $authorService;
 
     public function __construct()
     {

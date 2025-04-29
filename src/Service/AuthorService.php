@@ -1,5 +1,8 @@
 <?php
-require_once __DIR__ . "/../repository/AuthorRepository.php";
+
+namespace BookStore\Service;
+
+use BookStore\Repository\AuthorRepository;
 
 class AuthorService
 {

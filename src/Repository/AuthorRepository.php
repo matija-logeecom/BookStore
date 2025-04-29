@@ -1,5 +1,7 @@
 <?php
 
+namespace BookStore\Repository;
+
 class AuthorRepository
 {
     public function __construct()
