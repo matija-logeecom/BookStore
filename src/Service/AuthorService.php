@@ -8,9 +8,9 @@ class AuthorService
 {
     private AuthorRepository $repository;
 
-    public function __construct()
+    public function __construct(AuthorRepository $repository)
     {
-        $this->repository = new AuthorRepository();
+        $this->repository = $repository;
     }
 
     /**

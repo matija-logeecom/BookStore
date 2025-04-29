@@ -1,9 +1,16 @@
 <?php
+
+session_start();
 require_once __DIR__ . "/../vendor/autoload.php";
 
 use BookStore\Controller\AuthorController;
+use BookStore\Core\ServiceRegistry;
 
-$controller = new AuthorController();
+try {
+    $controller = ServiceRegistry::get(AuthorController::class);
+} catch (Exception $e) {
+    echo $e->getMessage();
+}
 
 $action = $_GET['action'] ?? 'listAuthors';
 $id = $_GET['id'] ?? 0;

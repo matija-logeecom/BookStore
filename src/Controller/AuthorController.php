@@ -8,10 +8,9 @@ class AuthorController
 {
     private AuthorService $authorService;
 
-    public function __construct()
+    public function __construct(AuthorService $authorService)
     {
-        session_start();
-        $this->authorService = new authorService();
+        $this->authorService = $authorService;
     }
 
     /**
