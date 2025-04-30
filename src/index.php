@@ -3,7 +3,7 @@
 require_once __DIR__ . "/../vendor/autoload.php";
 
 use BookStore\Controller\AuthorController;
-use BookStore\Core\ServiceRegistry;
+use BookStore\Infrastructure\ServiceRegistry;
 
 try {
     $controller = ServiceRegistry::get(AuthorController::class);

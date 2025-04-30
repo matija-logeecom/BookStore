@@ -22,8 +22,7 @@ class AuthorRepository
     public function getAll(): array
     {
         $query = "SELECT * FROM Authors";
-        $statement = $this->connection->prepare($query);
-        $statement->execute();
+        $statement = $this->connection->query($query);
         return $statement->fetchAll();
     }
 
@@ -81,6 +80,7 @@ class AuthorRepository
     public function getAuthorById(int $authorId): ?array
     {
         $authors = $this->getAll();
+
         return current(array_filter($authors, fn($a) => $a['id'] === $authorId));
     }
 

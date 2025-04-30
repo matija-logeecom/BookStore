@@ -1,7 +1,21 @@
 <?php
+include "includes/data.php";
+
+$book_id = (int)($_GET['book_id'] ?? 0);
+$book = null;
+
+foreach ($books as $authorBooks) {
+    foreach ($authorBooks as $b) {
+        if ($b['id'] === $book_id) {
+            $book = $b;
+            break;
+        }
+    }
+}
+
 $errors = [];
-$title = '';
-$year = '';
+$title = $book['title'];
+$year = (int)$book['year'];
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $title = trim($_POST["title"] ?? '');
@@ -26,14 +40,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Create Book</title>
-    <link rel="stylesheet" href="../public/style/create_book.css"/>
+    <title>Edit Book</title>
+    <link rel="stylesheet" href="../style/edit_book.css"/>
 </head>
 <body>
 <div class="form-wrapper">
     <form method="POST">
         <fieldset>
-            <legend>Book Create</legend>
+            <legend>Book Edit (<?= $book_id ?>)</legend>
 
             <label for="title">Title</label>
             <input type="text" id="title" name="title" value="<?= htmlspecialchars($title); ?>">

@@ -35,6 +35,7 @@ class AuthorController
 
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             include __DIR__ . "/../../public/pages/create_author.phtml";
+
             return;
         }
 
@@ -44,6 +45,7 @@ class AuthorController
 
         if (!empty($errors['firstName'] || !empty($errors['lastName']))) {
             include __DIR__ . "/../../public/pages/create_author.phtml";
+
             return;
         }
 
@@ -68,6 +70,7 @@ class AuthorController
 
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             include __DIR__ . "/../../public/pages/edit_author.phtml";
+
             return;
         }
 
@@ -77,6 +80,7 @@ class AuthorController
 
         if (!empty($errors['firstName'] || !empty($errors['lastName']))) {
             include __DIR__ . "/../../public/pages/edit_author.phtml";
+
             return;
         }
 
@@ -96,8 +100,10 @@ class AuthorController
         $fullName = $this->authorService->getAuthorById($id)['name'] ?? '';
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             include __DIR__ . "/../../public/pages/delete_author.phtml";
+
             return;
         }
+
         if ($_POST['action'] === 'delete') {
             $this->authorService->deleteAuthor($id);
         }

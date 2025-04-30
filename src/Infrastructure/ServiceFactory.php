@@ -1,6 +1,6 @@
 <?php
 
-namespace BookStore\Core;
+namespace BookStore\Infrastructure;
 
 use BookStore\Controller\AuthorController;
 use BookStore\Service\AuthorService;
@@ -17,6 +17,7 @@ class ServiceFactory
     public function createAuthorRepository(): AuthorRepository
     {
         $database = DatabaseConnection::getInstance();
+
         return new AuthorRepository($database);
     }
 

@@ -102,6 +102,7 @@ class AuthorService
         if ($firstName === '') {
             $errors['firstName'] = "* This field is required";
         }
+
         if (strlen($firstName) > 100) {
             $errors['firstName'] = "First name must be <= 100 characters";
         }
@@ -109,6 +110,7 @@ class AuthorService
         if ($lastName === '') {
             $errors['lastName'] = "* This field is required";
         }
+
         if (strlen($lastName) > 100) {
             $errors['lastName'] = "Last name must be <= 100 characters";
         }

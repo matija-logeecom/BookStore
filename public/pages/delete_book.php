@@ -31,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <head>
     <meta charset="UTF-8">
     <title>Delete Author</title>
-    <link rel="stylesheet" href="../public/style/delete_item.css"/>
+    <link rel="stylesheet" href="../style/delete_item.css"/>
 </head>
 <body>
 <div id="deleteConfirmationDialog" class="modal">

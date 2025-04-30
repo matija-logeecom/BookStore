@@ -1,6 +1,6 @@
 <?php
 
-namespace BookStore\Core;
+namespace BookStore\Infrastructure;
 
 use Exception;
 
