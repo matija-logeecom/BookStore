@@ -11,5 +11,7 @@
             "email": "matija.stankovic@logeecom.com"
         }
     ],
-    "require": {}
+    "require": {
+      "ext-pdo": "*"
+    }
 }

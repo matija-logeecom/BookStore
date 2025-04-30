@@ -5,6 +5,7 @@ namespace BookStore\Core;
 use BookStore\Controller\AuthorController;
 use BookStore\Service\AuthorService;
 use BookStore\Repository\AuthorRepository;
+use BookStore\Database\DatabaseConnection;
 
 class ServiceFactory
 {
@@ -15,7 +16,8 @@ class ServiceFactory
      */
     public function createAuthorRepository(): AuthorRepository
     {
-        return new AuthorRepository();
+        $database = DatabaseConnection::getInstance();
+        return new AuthorRepository($database);
     }
 
     /**
@@ -28,7 +30,6 @@ class ServiceFactory
     {
         return new AuthorService($authorRepository);
     }
-
 
     /**
      * Create an AuthorController instance

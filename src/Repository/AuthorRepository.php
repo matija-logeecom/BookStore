@@ -2,12 +2,16 @@
 
 namespace BookStore\Repository;
 
+use BookStore\Database\DatabaseConnection;
+use PDO;
+
 class AuthorRepository
 {
-    public function __construct()
+    private PDO $connection;
+
+    public function __construct(DatabaseConnection $database)
     {
-        $_SESSION['authors'] = $_SESSION['authors'] ?? [];
-        $_SESSION['currentId'] = $_SESSION['currentId'] ?? 1;
+        $this->connection = $database->getConnection();
     }
 
     /**
@@ -17,7 +21,10 @@ class AuthorRepository
      */
     public function getAll(): array
     {
-        return $_SESSION['authors'];
+        $query = "SELECT * FROM Authors";
+        $statement = $this->connection->prepare($query);
+        $statement->execute();
+        return $statement->fetchAll();
     }
 
     /**
@@ -29,7 +36,9 @@ class AuthorRepository
      */
     public function addAuthor($fullName): void
     {
-        $_SESSION['authors'][] = ['id' => $_SESSION['currentId']++, 'name' => $fullName, 'books' => 0];
+        $query = "INSERT INTO Authors (name) VALUES (:name)";
+        $statement = $this->connection->prepare($query);
+        $statement->execute(['name' => $fullName]);
     }
 
     /**
@@ -42,8 +51,9 @@ class AuthorRepository
      */
     public function editAuthor($authorId, $fullName): void
     {
-        $authorIndex = $this->getAuthorIndex($authorId);
-        $_SESSION['authors'][$authorIndex]['name'] = $fullName;
+        $query = "UPDATE Authors SET name = :name WHERE id = :id";
+        $statement = $this->connection->prepare($query);
+        $statement->execute(['name' => $fullName, 'id' => $authorId]);
     }
 
     /**
@@ -55,7 +65,9 @@ class AuthorRepository
      */
     public function deleteAuthor(int $authorId): void
     {
-        $_SESSION['authors'] = array_filter($_SESSION['authors'], fn($a) => $a['id'] !== $authorId);
+        $query = "DELETE FROM Authors WHERE id = :id";
+        $statement = $this->connection->prepare($query);
+        $statement->execute(['id' => $authorId]);
     }
 
 
@@ -68,7 +80,8 @@ class AuthorRepository
      */
     public function getAuthorById(int $authorId): ?array
     {
-        return current(array_filter($_SESSION['authors'], fn($a) => $a['id'] === $authorId));
+        $authors = $this->getAll();
+        return current(array_filter($authors, fn($a) => $a['id'] === $authorId));
     }
 
     /**
