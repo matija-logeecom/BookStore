@@ -51,10 +51,10 @@ class ServiceRegistry
         $authorRepository = $factory->createAuthorRepository();
         self::$container->set(AuthorRepository::class, $authorRepository);
 
-        $authorService = $factory->createAuthorService();
+        $authorService = $factory->createAuthorService($authorRepository);
         self::$container->set(AuthorService::class, $authorService);
 
-        $authorController = $factory->createAuthorController();
+        $authorController = $factory->createAuthorController($authorService);
         self::$container->set(AuthorController::class, $authorController);
     }
 }

@@ -21,22 +21,23 @@ class ServiceFactory
     /**
      * Create an AuthorService instance
      *
+     * @param AuthorRepository $authorRepository
      * @return AuthorService
      */
-    public function createAuthorService(): AuthorService
+    public function createAuthorService(AuthorRepository $authorRepository): AuthorService
     {
-        $authorRepository = self::createAuthorRepository();
         return new AuthorService($authorRepository);
     }
+
 
     /**
      * Create an AuthorController instance
      *
+     * @param AuthorService $authorService
      * @return AuthorController
      */
-    public function createAuthorController(): AuthorController
+    public function createAuthorController(AuthorService $authorService): AuthorController
     {
-        $authorService = self::createAuthorService();
         return new AuthorController($authorService);
     }
 }
