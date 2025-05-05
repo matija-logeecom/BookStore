@@ -5,7 +5,7 @@ namespace BookStore\Repository;
 use BookStore\Database\DatabaseConnection;
 use PDO;
 
-class AuthorRepository
+class DatabaseAuthorRepository implements AuthorRepositoryInterface
 {
     private PDO $connection;
 
@@ -91,15 +91,4 @@ class AuthorRepository
      *
      * @return int|null
      */
-    private function getAuthorIndex($authorId): ?int
-    {
-        $authors = $_SESSION['authors'];
-        foreach ($authors as $index => $author) {
-            if ($author['id'] === $authorId) {
-                return $index;
-            }
-        }
-
-        return -1;
-    }
 }

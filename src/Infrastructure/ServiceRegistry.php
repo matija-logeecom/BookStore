@@ -3,8 +3,8 @@
 namespace BookStore\Infrastructure;
 
 use BookStore\Controller\AuthorController;
+use BookStore\Repository\AuthorRepositoryInterface;
 use BookStore\Service\AuthorService;
-use BookStore\Repository\AuthorRepository;
 use Exception;
 
 class ServiceRegistry
@@ -32,6 +32,7 @@ class ServiceRegistry
      * Gets a service with provided name
      *
      * @param string $name
+     *
      * @return mixed
      * @throws Exception
      */
@@ -44,12 +45,13 @@ class ServiceRegistry
      * Creates services and adds them to services array
      *
      * @param ServiceFactory $factory
+     *
      * @return void
      */
     private static function registerServices(ServiceFactory $factory): void
     {
         $authorRepository = $factory->createAuthorRepository();
-        self::$container->set(AuthorRepository::class, $authorRepository);
+        self::$container->set(AuthorRepositoryInterface::class, $authorRepository);
 
         $authorService = $factory->createAuthorService($authorRepository);
         self::$container->set(AuthorService::class, $authorService);

@@ -2,13 +2,13 @@
 
 namespace BookStore\Service;
 
-use BookStore\Repository\AuthorRepository;
+use BookStore\Repository\AuthorRepositoryInterface;
 
 class AuthorService
 {
-    private AuthorRepository $repository;
+    private AuthorRepositoryInterface $repository;
 
-    public function __construct(AuthorRepository $repository)
+    public function __construct(AuthorRepositoryInterface $repository)
     {
         $this->repository = $repository;
     }
