@@ -3,6 +3,7 @@
 namespace BookStore\Controller;
 
 use BookStore\Service\AuthorService;
+use BookStore\Response\HtmlResponse;
 
 class AuthorController
 {
@@ -21,7 +22,9 @@ class AuthorController
     public function listAuthors(): void
     {
         $authors = $this->authorService->getAuthorList();
-        include __DIR__ . "/../../public/pages/authors.phtml";
+
+        $path = __DIR__ . "/../../public/pages/authors.phtml";
+        $this->renderPage($path, ["authors" => $authors]);
     }
 
     /**
@@ -32,24 +35,34 @@ class AuthorController
     public function createAuthor(): void
     {
         $errors = ['firstName' => '', 'lastName' => ''];
+        $firstName = trim($_POST['first_name']) ?? '';
+        $lastName = trim($_POST['last_name']) ?? '';
 
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            include __DIR__ . "/../../public/pages/create_author.phtml";
+            $path = __DIR__ . "/../../public/pages/create_author.phtml";
+            $this->renderPage($path, [
+                "errors" => $errors,
+                'firstName' => $firstName,
+                'lastName' => $lastName,
+            ]);
 
             return;
         }
 
-        $firstName = trim($_POST['first_name']) ?? '';
-        $lastName = trim($_POST['last_name']) ?? '';
         $this->authorService->addAuthor($firstName, $lastName, $errors);
 
         if (!empty($errors['firstName'] || !empty($errors['lastName']))) {
-            include __DIR__ . "/../../public/pages/create_author.phtml";
+            $path = __DIR__ . "/../../public/pages/create_author.phtml";
+            $this->renderPage($path, [
+                "errors" => $errors,
+                'firstName' => $firstName,
+                'lastName' => $lastName,
+            ]);
 
             return;
         }
 
-        header('Location: index.php');
+        $this->renderPage("", headers: ['Location' => 'index.php']);
     }
 
     /**
@@ -62,29 +75,40 @@ class AuthorController
     public function editAuthor(int $id): void
     {
         $errors = ['firstName' => '', 'lastName' => ''];
-        $firstName = $lastName = '';
         $author = $this->authorService->getAuthorById($id);
+        $firstName = explode(' ', $author['name'])[0] ?? '';
+        $lastName = explode(' ', $author['name'])[1] ?? '';
         if (!$author) {
-            header('Location: index.php');
+            $this->renderPage("", headers: ['Location' => 'index.php']);
         }
 
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            include __DIR__ . "/../../public/pages/edit_author.phtml";
+            $path = __DIR__ . "/../../public/pages/edit_author.phtml";
+            $this->renderPage($path, [
+                'author' => $author,
+                'errors' => $errors,
+                'firstName' => $firstName,
+                'lastName' => $lastName
+            ]);
 
             return;
         }
 
-        $firstName = trim($_POST['first_name']) ?? '';
-        $lastName = trim($_POST['last_name']) ?? '';
         $this->authorService->editAuthor($id, $firstName, $lastName, $errors);
 
         if (!empty($errors['firstName'] || !empty($errors['lastName']))) {
-            include __DIR__ . "/../../public/pages/edit_author.phtml";
+            $path = __DIR__ . "/../../public/pages/edit_author.phtml";
+            $this->renderPage($path, [
+                'author' => $author,
+                'errors' => $errors,
+                'firstName' => $firstName,
+                'lastName' => $lastName
+            ]);
 
             return;
         }
 
-        header('Location: index.php');
+        $this->renderPage("", headers: ['Location' => 'index.php']);
 
     }
 
@@ -99,7 +123,8 @@ class AuthorController
     {
         $fullName = $this->authorService->getAuthorById($id)['name'] ?? '';
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            include __DIR__ . "/../../public/pages/delete_author.phtml";
+            $path = __DIR__ . "/../../public/pages/delete_author.phtml";
+            $this->renderPage($path, ['fullName' => $fullName]);
 
             return;
         }
@@ -108,6 +133,20 @@ class AuthorController
             $this->authorService->deleteAuthor($id);
         }
 
-        header('Location: index.php');
+        $this->renderPage("", headers: ['Location' => 'index.php']);
+    }
+
+    private function renderPage(string $path, array $variables = [], int $statusCode = 200, array $headers = []): void
+    {
+        extract($variables);
+
+        ob_start();
+        if (!empty($path)) {
+            include $path;
+        }
+        $content = ob_get_clean();
+
+        $response = new HtmlResponse($content, $statusCode, $headers);
+        $response->view();
     }
 }
