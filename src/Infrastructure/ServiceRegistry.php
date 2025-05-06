@@ -5,6 +5,11 @@ namespace BookStore\Infrastructure;
 use BookStore\Controller\AuthorController;
 use BookStore\Repository\AuthorRepositoryInterface;
 use BookStore\Service\AuthorService;
+
+use BookStore\Controller\BookController;
+use BookStore\Service\BookService;
+use BookStore\Repository\BookRepositoryInterface;
+
 use Exception;
 
 class ServiceRegistry
@@ -58,5 +63,14 @@ class ServiceRegistry
 
         $authorController = $factory->createAuthorController($authorService);
         self::$container->set(AuthorController::class, $authorController);
+
+        $bookRepository = $factory->createBookRepository();
+        self::$container->set(BookRepositoryInterface::class, $bookRepository);
+
+        $bookService = $factory->createBookService($bookRepository);
+        self::$container->set(BookService::class, $bookService);
+
+        $bookController = $factory->createBookController($bookService);
+        self::$container->set(BookController::class, $bookController);
     }
 }

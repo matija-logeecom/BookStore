@@ -30,5 +30,5 @@ export async function sendData(url, method = "POST", data = {}) {
 }
 
 export async function fetchAuthorBooks(authorId) {
-    return fetchData(`placeholder/${authorId}`)
+    return fetchData(`/api/books?authorId=${authorId}`);
 }

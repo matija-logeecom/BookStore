@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function loadBooks() {
         fetchAuthorBooks(authorId)
             .then(books => renderBooks(books))
-            .catch(err => console.error('Error loading books:', error))
+            .catch(err => console.error('Error loading books:', err))
     }
 
     function renderBooks(books) {
@@ -141,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 year: formWrapper.querySelector('#year').value
             };
 
-            sendData(`api/books/${book.id}/edit`, 'POST', updatedBook)
+            sendData(`/api/books/${book.id}/edit`, 'POST', updatedBook)
                 .then(() => {
                     document.body.classList.remove('overlay-active')
                     formWrapper.remove()
@@ -195,13 +195,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 year: formWrapper.querySelector('#year').value
             }
 
-            sendData(`api/books/create`, 'POST', newBook)
+            sendData(`/api/books/create`, 'POST', newBook)
                 .then(() => {
                     document.body.classList.remove('overlay-active')
                     formWrapper.remove()
                     loadBooks()
                 })
-                .catch(err => console.error('Error creating book:', error))
+                .catch(err => console.error('Error creating book:', err))
         }
 
         document.body.classList.add('overlay-active')
@@ -212,7 +212,7 @@ document.addEventListener('DOMContentLoaded', () => {
         removeExistingModal();
 
         const dialog = document.createElement('div');
-        dialog.className = 'modal';
+        dialog.className = 'book-delete-dialog';
         dialog.innerHTML = `
             <div class="modal-content">
                 <div class="modal-header">
@@ -231,11 +231,14 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         `;
 
-        dialog.querySelector('#cancelButton').onclick = () => dialog.remove();
+        dialog.querySelector('#cancelButton').onclick = () => {
+            document.body.classList.remove('overlay-active');
+            dialog.remove();
+        }
         dialog.querySelector('form').onsubmit = (e) => {
             e.preventDefault();
 
-            sendData(`api/books/${book.id}/delete`, 'POST')
+            sendData(`/api/books/${book.id}/delete`, 'POST')
                 .then(() => {
                     document.body.classList.remove('overlay-active')
                     dialog.remove();
@@ -251,6 +254,9 @@ document.addEventListener('DOMContentLoaded', () => {
     function removeExistingForm() {
         const existingForm = document.querySelector('.form-wrapper')
         if (existingForm) existingForm.remove()
+
+        const deleteDialog = document.querySelector('.book-delete-dialog'); // For book delete dialog
+        if (deleteDialog) deleteDialog.remove();
     }
 
     function removeExistingModal() {
