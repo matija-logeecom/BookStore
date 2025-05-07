@@ -55,21 +55,21 @@ try {
 
     // GET /api/books
     if ($requestMethod === 'GET' && $routePath === '/api/books') {
-        $bookController->getBooksByAuthor();
+        $bookController->getBooksByAuthor()->view();
     }
     // POST /api/books/create
     elseif ($requestMethod === 'POST' && $routePath === '/api/books/create') {
-        $bookController->createBook();
+        $bookController->createBook()->view();
     }
     // POST /api/books/{id}/edit
     elseif ($requestMethod === 'POST' && preg_match('/^\/api\/books\/(\d+)\/edit$/', $routePath, $matches)) {
         $bookId = (int)$matches[1];
-        $bookController->editBook($bookId);
+        $bookController->editBook($bookId)->view();
     }
     // POST /api/books/{id}/delete
     elseif ($requestMethod === 'POST' && preg_match('/^\/api\/books\/(\d+)\/delete$/', $routePath, $matches)) {
         $bookId = (int)$matches[1];
-        $bookController->deleteBook($bookId);
+        $bookController->deleteBook($bookId)->view();
     }
     else {
         JsonResponse::createNotFound()->view();

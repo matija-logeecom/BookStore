@@ -3,7 +3,6 @@
 namespace BookStore\Controller;
 
 use BookStore\Service\BookService;
-use BookStore\Response\HtmlResponse;
 use BookStore\Response\JsonResponse;
 
 class BookController
@@ -15,7 +14,7 @@ class BookController
         $this->bookService = $bookService;
     }
 
-    public function getBooksByAuthor(): void
+    public function getBooksByAuthor(): JsonResponse
     {
         $authorId = $_GET['authorId'] ?? null;
         $books = [];
@@ -24,11 +23,10 @@ class BookController
             $books = $this->bookService->getBooksByAuthor($authorId);
         }
 
-        $response = new JsonResponse($books);
-        $response->view();
+        return new JsonResponse($books);
     }
 
-    public function createBook(): void
+    public function createBook(): JsonResponse
     {
         $data = json_decode(file_get_contents('php://input'), true);
         $errors = [];
@@ -39,15 +37,14 @@ class BookController
 
         $newBook = $this->bookService->addBook($title, (string)$year, $authorId, $errors);
 
-        if ($newBook) {
-            $response = new JsonResponse(['success' => true, 'book' => $newBook], 201); // 201 Created
-        } else {
-            $response = new JsonResponse(['success' => false, 'errors' => $errors], 400); // 400 Bad Request for validation errors
+        if (!$newBook) {
+            return JsonResponse::createBadRequest();
         }
-        $response->view();
+
+        return new JsonResponse(['success' => true, 'book' => $newBook], 201);
     }
 
-    public function editBook(int $id): void
+    public function editBook(int $id): JsonResponse
     {
         $data = json_decode(file_get_contents('php://input'), true);
         $errors = [];
@@ -57,29 +54,30 @@ class BookController
 
         $updatedBook = $this->bookService->editBook($id, $title, (string)$year, $errors);
 
-        if ($updatedBook) {
-            $response = new JsonResponse(['success' => true, 'book' => $updatedBook]);
-        } else {
-            if (!empty($errors)) {
-                $response = new JsonResponse(['success' => false, 'errors' => $errors], 400);
-            } elseif (!$this->bookService->getBookById($id)) {
-                $response = new JsonResponse(['success' => false, 'errors' => ['general' => 'Book not found.']], 404);
-            } else {
-                $response = new JsonResponse(['success' => false, 'errors' => ['general' => 'Failed to update book.']], 500);
-            }
+        if (!empty($errors)) {
+            return JsonResponse::createBadRequest();
         }
-        $response->view();
+
+        if (!$this->bookService->getBookById($id)) {
+            return JsonResponse::createNotFound();
+        }
+
+        // Success
+        if ($updatedBook) {
+            return new JsonResponse(['success' => true, 'book' => $updatedBook]);
+        }
+
+        return JsonResponse::createInternalServerError();
     }
 
-    public function deleteBook(int $id): void
+    public function deleteBook(int $id): JsonResponse
     {
         $success = $this->bookService->deleteBook($id);
 
-        if ($success) {
-            $response = new JsonResponse(['success' => true, 'message' => 'Book deleted successfully.']);
-        } else {
-            $response = new JsonResponse(['success' => false, 'message' => 'Failed to delete book or book not found.'], 404);
+        if (!$success) {
+            return JsonResponse::createNotFound();
         }
-        $response->view();
+
+        return new JsonResponse(['success' => true, 'message' => 'Book deleted successfully.']);
     }
 }

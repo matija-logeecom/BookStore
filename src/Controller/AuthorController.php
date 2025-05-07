@@ -125,18 +125,4 @@ class AuthorController
 
         return HtmlResponse::createResponse("", 303, ['Location' => 'index.php']);
     }
-
-//    private function renderPage(string $path, array $variables = [], int $statusCode = 200, array $headers = []): void
-//    {
-//        extract($variables);
-//
-//        ob_start();
-//        if (!empty($path)) {
-//            include $path;
-//        }
-//        $content = ob_get_clean();
-//
-//        $response = new HtmlResponse($content, $statusCode, $headers);
-//        $response->view();
-//    }
 }
