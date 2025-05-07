@@ -3,14 +3,17 @@
 namespace BookStore\Service;
 
 use BookStore\Repository\AuthorRepositoryInterface;
+use BookStore\Repository\BookRepositoryInterface;
 
 class AuthorService
 {
-    private AuthorRepositoryInterface $repository;
+    private AuthorRepositoryInterface $authorRepository;
+    private BookRepositoryInterface $bookRepository;
 
-    public function __construct(AuthorRepositoryInterface $repository)
+    public function __construct(AuthorRepositoryInterface $authorRepository, BookRepositoryInterface $bookRepository)
     {
-        $this->repository = $repository;
+        $this->authorRepository = $authorRepository;
+        $this->bookRepository = $bookRepository;
     }
 
     /**
@@ -20,9 +23,13 @@ class AuthorService
      */
     public function getAuthorList(): array
     {
-        return $this->repository->getAll();
-    }
+        $authors = array_map(fn($author) => $author + ['books' => 0], $this->authorRepository->getAll());
+        foreach ($authors as &$author) {
+           $author['books'] = $this->countBooks($author);
+        }
 
+        return $authors;
+    }
 
     /**
      * Adds an author with provided name to current session
@@ -40,7 +47,7 @@ class AuthorService
         }
 
         $fullName = $firstName . ' ' . $lastName;
-        $this->repository->addAuthor($fullName);
+        $this->authorRepository->addAuthor($fullName);
     }
 
     /**
@@ -60,7 +67,7 @@ class AuthorService
         }
 
         $fullName = $firstName . ' ' . $lastName;
-        $this->repository->editAuthor($authorId, $fullName);
+        $this->authorRepository->editAuthor($authorId, $fullName);
     }
 
     /**
@@ -72,7 +79,12 @@ class AuthorService
      */
     public function deleteAuthor(int $authorId): void
     {
-        $this->repository->deleteAuthor($authorId);
+        $this->authorRepository->deleteAuthor($authorId);
+
+        $books = $this->bookRepository->getBooksByAuthorId($authorId);
+        foreach ($books as $book) {
+            $this->bookRepository->deleteBook($book['id']);
+        }
     }
 
 
@@ -85,7 +97,7 @@ class AuthorService
      */
     public function getAuthorById($id): ?array
     {
-        return $this->repository->getAuthorById($id);
+        return $this->authorRepository->getAuthorById($id);
     }
 
     /**
@@ -116,5 +128,12 @@ class AuthorService
         }
 
         return (empty($errors['firstName']) && empty($errors['lastName']));
+    }
+
+    private function countBooks(mixed $author): int
+    {
+        $books = $this->bookRepository->getBooksByAuthorId($author['id']);
+
+        return count($books);
     }
 }

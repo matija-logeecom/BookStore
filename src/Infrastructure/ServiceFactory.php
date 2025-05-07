@@ -35,9 +35,9 @@ class ServiceFactory
      *
      * @return AuthorService
      */
-    public function createAuthorService(AuthorRepositoryInterface $authorRepository): AuthorService
+    public function createAuthorService(AuthorRepositoryInterface $authorRepository, BookRepositoryInterface $bookRepository): AuthorService
     {
-        return new AuthorService($authorRepository);
+        return new AuthorService($authorRepository, $bookRepository);
     }
 
     /**

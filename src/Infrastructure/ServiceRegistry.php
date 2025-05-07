@@ -55,15 +55,6 @@ class ServiceRegistry
      */
     private static function registerServices(ServiceFactory $factory): void
     {
-        $authorRepository = $factory->createAuthorRepository();
-        self::$container->set(AuthorRepositoryInterface::class, $authorRepository);
-
-        $authorService = $factory->createAuthorService($authorRepository);
-        self::$container->set(AuthorService::class, $authorService);
-
-        $authorController = $factory->createAuthorController($authorService);
-        self::$container->set(AuthorController::class, $authorController);
-
         $bookRepository = $factory->createBookRepository();
         self::$container->set(BookRepositoryInterface::class, $bookRepository);
 
@@ -72,5 +63,14 @@ class ServiceRegistry
 
         $bookController = $factory->createBookController($bookService);
         self::$container->set(BookController::class, $bookController);
+
+        $authorRepository = $factory->createAuthorRepository();
+        self::$container->set(AuthorRepositoryInterface::class, $authorRepository);
+
+        $authorService = $factory->createAuthorService($authorRepository, $bookRepository);
+        self::$container->set(AuthorService::class, $authorService);
+
+        $authorController = $factory->createAuthorController($authorService);
+        self::$container->set(AuthorController::class, $authorController);
     }
 }

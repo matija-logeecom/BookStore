@@ -109,3 +109,13 @@ a {
     text-decoration: none;
     color: inherit;
 }
+
+.back-button-container {
+    margin: 20px auto 0;
+    padding-left: 36px;
+}
+
+.back-image {
+    height: 42px;
+    width: 42px;
+}
