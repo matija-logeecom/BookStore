@@ -14,7 +14,7 @@ class HtmlResponse extends Response
     }
 
     public static function createResponse(string $path, int $statusCode = 200, array $headers = [],
-                                          array $variables = []) : HtmlResponse
+                                          array  $variables = []): HtmlResponse
     {
         extract($variables);
 
@@ -24,12 +24,29 @@ class HtmlResponse extends Response
         }
         $html = ob_get_clean();
 
-        return new HtmlResponse($html, $statusCode, $headers);
+        return new self($html, $statusCode, $headers);
     }
 
     public function view(): void
     {
         $this->sendHeaders();
         echo $this->body;
+    }
+
+    public static function createNotFound(string $message = "Page not found."): self
+    {
+        return new self("<h1>404 Not Found</h1><p>" . htmlspecialchars($message) . "</p>", 404);
+    }
+
+    public static function createBadRequest(string $message = "Bad Request."): self
+    {
+        return new self("<h1>400 Bad Request</h1><p>" . htmlspecialchars($message) . "</p>", 400);
+    }
+
+    public static function createInternalServerError(string $message = "Bad Request."): self
+    {
+        return new self("<h1>500 Internal Server Error</h1><p>"
+            . htmlspecialchars($message)
+            . "</p>", 500);
     }
 }

@@ -7,6 +7,7 @@ abstract class Response
     protected mixed $body;
     protected array $headers = [];
     protected int $statusCode = 200;
+
     public function __construct(mixed $body, int $statusCode = 200, array $headers = [])
     {
         $this->body = $body;
@@ -44,4 +45,11 @@ abstract class Response
     }
 
     abstract public function view(): void;
+
+    abstract static public function createNotFound(string $message = "Page not found."): self;
+
+    abstract public static function createBadRequest(string $message = "Bad Request."): self;
+
+    abstract public static function createInternalServerError(string $message =
+                                                              "An internal server error occurred."): self;
 }

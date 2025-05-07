@@ -36,18 +36,18 @@ try {
                 if ($id !== null) {
                     $authorController->editAuthor($id)->view();
                 } else {
-                    (new HtmlResponse("Error: Author ID is required for editing.", 400))->view();
+                    HtmlResponse::createBadRequest()->view();
                 }
                 break;
             case 'deleteAuthor':
                 if ($id !== null) {
                     $authorController->deleteAuthor($id)->view();
                 } else {
-                    (new HtmlResponse("Error: Author ID is required for deletion.", 400))->view();
+                    HtmlResponse::createBadRequest()->view();
                 }
                 break;
             default:
-                (new HtmlResponse("Page not found.", 404))->view();
+                HtmlResponse::createNotFound()->view();
         }
         exit;
     }
@@ -72,15 +72,15 @@ try {
         $bookController->deleteBook($bookId);
     }
     else {
-        (new JsonResponse(['error' => 'API endpoint not found.'], 404))->view();
+        JsonResponse::createNotFound()->view();
     }
 
 } catch (Exception $e) {
     error_log("Unhandled Exception: " . $e->getMessage() . "\nStack Trace:\n" . $e->getTraceAsString());
 
     if (str_starts_with($routePath, '/api/')) {
-        (new JsonResponse(['error' => 'An internal server error occurred.'], 500))->view();
+        JsonResponse::createInternalServerError()->view();
     } else {
-        (new HtmlResponse("<h1>Error</h1><p>An internal server error occurred. Please try again later.</p><pre>" . $e->getMessage() . "</pre>", 500))->view();
+        HtmlResponse::createInternalServerError()->view();
     }
 }
