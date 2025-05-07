@@ -17,22 +17,22 @@ class AuthorController
     /**
      * Shows all authors on page
      *
-     * @return void
+     * @return HtmlResponse
      */
-    public function listAuthors(): void
+    public function listAuthors(): HtmlResponse
     {
         $authors = $this->authorService->getAuthorList();
 
         $path = __DIR__ . "/../../public/pages/authors.phtml";
-        $this->renderPage($path, ["authors" => $authors]);
+        return HtmlResponse::createResponse($path, variables: ["authors" => $authors]);
     }
 
     /**
      * Adds an author to current session
      *
-     * @return void
+     * @return HtmlResponse
      */
-    public function createAuthor(): void
+    public function createAuthor(): HtmlResponse
     {
         $errors = ['firstName' => '', 'lastName' => ''];
         $firstName = trim($_POST['first_name']) ?? '';
@@ -40,29 +40,25 @@ class AuthorController
 
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             $path = __DIR__ . "/../../public/pages/create_author.phtml";
-            $this->renderPage($path, [
+            return HtmlResponse::createResponse($path, variables: [
                 "errors" => $errors,
                 'firstName' => $firstName,
                 'lastName' => $lastName,
             ]);
-
-            return;
         }
 
         $this->authorService->addAuthor($firstName, $lastName, $errors);
 
         if (!empty($errors['firstName'] || !empty($errors['lastName']))) {
             $path = __DIR__ . "/../../public/pages/create_author.phtml";
-            $this->renderPage($path, [
+            return HtmlResponse::createResponse($path, variables: [
                 "errors" => $errors,
                 'firstName' => $firstName,
                 'lastName' => $lastName,
             ]);
-
-            return;
         }
 
-        $this->renderPage("", headers: ['Location' => 'index.php']);
+        return HtmlResponse::createResponse("", 303, ['Location' => 'index.php']);
     }
 
     /**
@@ -70,45 +66,41 @@ class AuthorController
      *
      * @param int $id
      *
-     * @return void
+     * @return HtmlResponse
      */
-    public function editAuthor(int $id): void
+    public function editAuthor(int $id): HtmlResponse
     {
         $errors = ['firstName' => '', 'lastName' => ''];
         $author = $this->authorService->getAuthorById($id);
         $firstName = explode(' ', $author['name'])[0] ?? '';
         $lastName = explode(' ', $author['name'])[1] ?? '';
         if (!$author) {
-            $this->renderPage("", headers: ['Location' => 'index.php']);
+            return HtmlResponse::createResponse("", 303, ['Location' => 'index.php']);
         }
 
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             $path = __DIR__ . "/../../public/pages/edit_author.phtml";
-            $this->renderPage($path, [
+            return HtmlResponse::createResponse($path, variables: [
                 'author' => $author,
                 'errors' => $errors,
                 'firstName' => $firstName,
                 'lastName' => $lastName
             ]);
-
-            return;
         }
 
         $this->authorService->editAuthor($id, $firstName, $lastName, $errors);
 
         if (!empty($errors['firstName'] || !empty($errors['lastName']))) {
             $path = __DIR__ . "/../../public/pages/edit_author.phtml";
-            $this->renderPage($path, [
+            return HtmlResponse::createResponse($path, variables: [
                 'author' => $author,
                 'errors' => $errors,
                 'firstName' => $firstName,
                 'lastName' => $lastName
             ]);
-
-            return;
         }
 
-        $this->renderPage("", headers: ['Location' => 'index.php']);
+        return HtmlResponse::createResponse("", 303, ['Location' => 'index.php']);
 
     }
 
@@ -117,36 +109,34 @@ class AuthorController
      *
      * @param int $id
      *
-     * @return void
+     * @return HtmlResponse
      */
-    public function deleteAuthor(int $id): void
+    public function deleteAuthor(int $id): HtmlResponse
     {
         $fullName = $this->authorService->getAuthorById($id)['name'] ?? '';
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             $path = __DIR__ . "/../../public/pages/delete_author.phtml";
-            $this->renderPage($path, ['fullName' => $fullName]);
-
-            return;
+            return HtmlResponse::createResponse($path, variables: ['fullName' => $fullName]);
         }
 
         if ($_POST['action'] === 'delete') {
             $this->authorService->deleteAuthor($id);
         }
 
-        $this->renderPage("", headers: ['Location' => 'index.php']);
+        return HtmlResponse::createResponse("", 303, ['Location' => 'index.php']);
     }
 
-    private function renderPage(string $path, array $variables = [], int $statusCode = 200, array $headers = []): void
-    {
-        extract($variables);
-
-        ob_start();
-        if (!empty($path)) {
-            include $path;
-        }
-        $content = ob_get_clean();
-
-        $response = new HtmlResponse($content, $statusCode, $headers);
-        $response->view();
-    }
+//    private function renderPage(string $path, array $variables = [], int $statusCode = 200, array $headers = []): void
+//    {
+//        extract($variables);
+//
+//        ob_start();
+//        if (!empty($path)) {
+//            include $path;
+//        }
+//        $content = ob_get_clean();
+//
+//        $response = new HtmlResponse($content, $statusCode, $headers);
+//        $response->view();
+//    }
 }

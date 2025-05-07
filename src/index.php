@@ -27,21 +27,21 @@ try {
 
         switch ($action) {
             case 'listAuthors':
-                $authorController->listAuthors();
+                $authorController->listAuthors()->view();
                 break;
             case 'createAuthor':
-                $authorController->createAuthor();
+                $authorController->createAuthor()->view();
                 break;
             case 'editAuthor':
                 if ($id !== null) {
-                    $authorController->editAuthor($id);
+                    $authorController->editAuthor($id)->view();
                 } else {
                     (new HtmlResponse("Error: Author ID is required for editing.", 400))->view();
                 }
                 break;
             case 'deleteAuthor':
                 if ($id !== null) {
-                    $authorController->deleteAuthor($id);
+                    $authorController->deleteAuthor($id)->view();
                 } else {
                     (new HtmlResponse("Error: Author ID is required for deletion.", 400))->view();
                 }

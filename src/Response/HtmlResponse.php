@@ -13,6 +13,20 @@ class HtmlResponse extends Response
         }
     }
 
+    public static function createResponse(string $path, int $statusCode = 200, array $headers = [],
+                                          array $variables = []) : HtmlResponse
+    {
+        extract($variables);
+
+        ob_start();
+        if (!empty($path)) {
+            include $path;
+        }
+        $html = ob_get_clean();
+
+        return new HtmlResponse($html, $statusCode, $headers);
+    }
+
     public function view(): void
     {
         $this->sendHeaders();

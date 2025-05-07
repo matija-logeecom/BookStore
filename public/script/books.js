@@ -32,7 +32,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderBooks(books) {
-        container.innerHTML = ''
+        while (container.firstChild) {
+            container.removeChild(container.firstChild);
+        }
+
 
         if (books.length === 0) {
             container.textContent = 'No books found for this author.'
@@ -41,15 +44,21 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const table = document.createElement('table')
-
         const thead = document.createElement('thead')
-        thead.innerHTML = `
-            <tr>
-                <th class="book-col">Book</th>
-                <th class="actions-col">Actions</th>
-            </tr>
-        `
-        table.appendChild(thead);
+        const headerRow = document.createElement('tr')
+
+        const thBook = document.createElement('th')
+        thBook.className = 'book-col'
+        thBook.textContent = 'Book'
+        headerRow.appendChild(thBook)
+
+        const thActions = document.createElement('th')
+        thActions.className = 'actions-col'
+        thActions.textContent = 'Actions'
+        headerRow.appendChild(thActions)
+
+        thead.appendChild(headerRow)
+        table.appendChild(thead)
 
         const tbody = document.createElement('tbody')
 
@@ -57,7 +66,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const tr = document.createElement('tr')
 
             const tdTitle = document.createElement('td')
-            tdTitle.innerHTML = `<b>${book.title} (${book.year})</b>`
+            const b = document.createElement('b')
+            b.textContent = `${book.title} (${book.year})`
+            tdTitle.appendChild(b)
 
             const tdActions = document.createElement('td')
             tdActions.className = 'actions-col'
@@ -106,40 +117,67 @@ document.addEventListener('DOMContentLoaded', () => {
         const formWrapper = document.createElement('div');
         formWrapper.className = 'form-wrapper';
 
-        formWrapper.innerHTML = `
-            <button type="button" class="close-form">X</button>
+        const closeButton = document.createElement('button');
+        closeButton.type = 'button';
+        closeButton.className = 'close-form';
+        closeButton.textContent = 'X';
+        formWrapper.appendChild(closeButton);
 
-            <form>
-                <fieldset>
-                    <legend>Book Edit (${book.id})</legend>
+        const form = document.createElement('form');
+        const fieldset = document.createElement('fieldset');
+        const legend = document.createElement('legend');
+        legend.textContent = `Book Edit (${book.id})`;
+        fieldset.appendChild(legend);
 
-                    <label for="title">Title</label>
-                    <input type="text" id="title" name="title" value="${book.title}">
+        const titleLabel = document.createElement('label');
+        titleLabel.setAttribute('for', 'title');
+        titleLabel.textContent = 'Title';
+        fieldset.appendChild(titleLabel);
 
-                    <label for="year">Year</label>
-                    <input type="text" id="year" name="year" value="${book.year}">
+        const titleInput = document.createElement('input');
+        titleInput.type = 'text';
+        titleInput.id = 'title';
+        titleInput.name = 'title';
+        titleInput.value = book.title;
+        fieldset.appendChild(titleInput);
 
-                    <div class="button-div">
-                        <button type="submit">Save</button>
-                    </div>
-                </fieldset>
-            </form>
-        `
+        const yearLabel = document.createElement('label');
+        yearLabel.setAttribute('for', 'year');
+        yearLabel.textContent = 'Year';
+        fieldset.appendChild(yearLabel);
 
-        formWrapper.querySelector('.close-form').addEventListener('click', () => {
+        const yearInput = document.createElement('input');
+        yearInput.type = 'text';
+        yearInput.id = 'year';
+        yearInput.name = 'year';
+        yearInput.value = book.year;
+        fieldset.appendChild(yearInput);
+
+        const buttonDiv = document.createElement('div');
+        buttonDiv.className = 'button-div';
+        const saveButton = document.createElement('button');
+        saveButton.type = 'submit';
+        saveButton.textContent = 'Save';
+        buttonDiv.appendChild(saveButton);
+        fieldset.appendChild(buttonDiv);
+
+        form.appendChild(fieldset);
+        formWrapper.appendChild(form);
+
+        closeButton.addEventListener('click', () => {
             document.body.classList.remove('overlay-active');
             formWrapper.remove();
         });
 
-        formWrapper.querySelector('form').onsubmit = (e) => {
+        form.onsubmit = (e) => {
             e.preventDefault();
 
             const updatedBook = {
                 id: book.id,
                 author_id: authorId,
-                title: formWrapper.querySelector('#title').value,
-                year: formWrapper.querySelector('#year').value
-            };
+                title: titleInput.value,
+                year: yearInput.value
+            }
 
             sendData(`/api/books/${book.id}/edit`, 'POST', updatedBook)
                 .then(() => {
@@ -160,39 +198,66 @@ document.addEventListener('DOMContentLoaded', () => {
         const formWrapper = document.createElement('div')
         formWrapper.className = 'form-wrapper'
 
-        formWrapper.innerHTML = `
-            <button type="button" class="close-form">X</button>
+        const closeButton = document.createElement('button');
+        closeButton.type = 'button';
+        closeButton.className = 'close-form';
+        closeButton.textContent = 'X';
+        formWrapper.appendChild(closeButton);
 
-            <form>
-                <fieldset>
-                    <legend>Add Book</legend>
+        const form = document.createElement('form');
+        const fieldset = document.createElement('fieldset');
+        const legend = document.createElement('legend');
+        legend.textContent = 'Add Book';
+        fieldset.appendChild(legend);
 
-                    <label for="title">Title</label>
-                    <input type="text" id="title" name="title" value="">
+        const titleLabel = document.createElement('label');
+        titleLabel.setAttribute('for', 'title');
+        titleLabel.textContent = 'Title';
+        fieldset.appendChild(titleLabel);
 
-                    <label for="year">Year</label>
-                    <input type="text" id="year" name="year" value="">
+        const titleInput = document.createElement('input');
+        titleInput.type = 'text';
+        titleInput.id = 'title';
+        titleInput.name = 'title';
+        titleInput.value = '';
+        fieldset.appendChild(titleInput);
 
-                    <div class="button-div">
-                        <button type="submit">Save</button>
-                    </div>
+        const yearLabel = document.createElement('label');
+        yearLabel.setAttribute('for', 'year');
+        yearLabel.textContent = 'Year';
+        fieldset.appendChild(yearLabel);
 
-                </fieldset>
-            </form>
-        `
+        const yearInput = document.createElement('input');
+        yearInput.type = 'text';
+        yearInput.id = 'year';
+        yearInput.name = 'year';
+        yearInput.value = '';
+        fieldset.appendChild(yearInput);
 
-        formWrapper.querySelector('.close-form').addEventListener('click', () => {
+        const buttonDiv = document.createElement('div');
+        buttonDiv.className = 'button-div';
+        const saveButton = document.createElement('button');
+        saveButton.type = 'submit';
+        saveButton.textContent = 'Save';
+        buttonDiv.appendChild(saveButton);
+        fieldset.appendChild(buttonDiv);
+
+        form.appendChild(fieldset);
+        formWrapper.appendChild(form);
+
+
+        closeButton.addEventListener('click', () => {
             document.body.classList.remove('overlay-active');
             formWrapper.remove();
         });
 
-        formWrapper.querySelector('form').onsubmit = (e) => {
+        form.onsubmit = (e) => {
             e.preventDefault()
 
             const newBook = {
                 author_id: authorId,
-                title: formWrapper.querySelector('#title').value,
-                year: formWrapper.querySelector('#year').value
+                title: titleInput.value,
+                year: yearInput.value
             }
 
             sendData(`/api/books/create`, 'POST', newBook)
@@ -212,30 +277,60 @@ document.addEventListener('DOMContentLoaded', () => {
         removeExistingModal();
 
         const dialog = document.createElement('div');
-        dialog.className = 'book-delete-dialog';
-        dialog.innerHTML = `
-            <div class="modal-content">
-                <div class="modal-header">
-                    <span class="exclamation-icon">❗</span>
-                    <h2>Delete Book</h2>
-                </div>
-                <div class="modal-body">
-                    <p>You are about to delete the book ${book.title}. If you proceed with this action, the application will permanently delete this book from the database.</p>
-                </div>
-                <form>
-                    <fieldset class="modal-footer">
-                        <button id="cancelButton" name="action" value="cancel" type="button">Cancel</button>
-                        <button id="deleteButton" name="action" value="delete" type="submit">Delete</button>
-                    </fieldset>
-                </form>
-            </div>
-        `;
+        dialog.className = 'book-delete-dialog'; // Use a specific class for the delete dialog
 
-        dialog.querySelector('#cancelButton').onclick = () => {
+        const modalContent = document.createElement('div');
+        modalContent.className = 'modal-content';
+
+        const modalHeader = document.createElement('div');
+        modalHeader.className = 'modal-header';
+
+        const exclamationIcon = document.createElement('span');
+        exclamationIcon.className = 'exclamation-icon';
+        exclamationIcon.textContent = '❗';
+        modalHeader.appendChild(exclamationIcon);
+
+        const h2 = document.createElement('h2');
+        h2.textContent = 'Delete Book';
+        modalHeader.appendChild(h2);
+        modalContent.appendChild(modalHeader);
+
+        const modalBody = document.createElement('div');
+        modalBody.className = 'modal-body';
+        const p = document.createElement('p');
+        p.textContent = `You are about to delete the book ${book.title}. If you proceed with this action, the application will permanently delete this book from the database.`;
+        modalBody.appendChild(p);
+        modalContent.appendChild(modalBody);
+
+        const form = document.createElement('form');
+        const fieldset = document.createElement('fieldset');
+        fieldset.className = 'modal-footer';
+
+        const cancelButton = document.createElement('button');
+        cancelButton.id = 'cancelButton';
+        cancelButton.name = 'action';
+        cancelButton.value = 'cancel';
+        cancelButton.type = 'button';
+        cancelButton.textContent = 'Cancel';
+        fieldset.appendChild(cancelButton);
+
+        const deleteButton = document.createElement('button');
+        deleteButton.id = 'deleteButton';
+        deleteButton.name = 'action';
+        deleteButton.value = 'delete';
+        deleteButton.type = 'submit';
+        deleteButton.textContent = 'Delete';
+        fieldset.appendChild(deleteButton);
+
+        form.appendChild(fieldset);
+        modalContent.appendChild(form);
+        dialog.appendChild(modalContent);
+
+        cancelButton.onclick = () => {
             document.body.classList.remove('overlay-active');
             dialog.remove();
         }
-        dialog.querySelector('form').onsubmit = (e) => {
+        form.onsubmit = (e) => {
             e.preventDefault();
 
             sendData(`/api/books/${book.id}/delete`, 'POST')
