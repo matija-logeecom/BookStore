@@ -81,6 +81,7 @@ class DatabaseAuthorRepository implements AuthorRepositoryInterface
     {
         $authors = $this->getAll();
 
-        return current(array_filter($authors, fn($a) => $a['id'] === $authorId));
+        $result = current(array_filter($authors, fn($a) => $a['id'] === $authorId));
+        return $result === false ? null : $result;
     }
 }

@@ -11,9 +11,9 @@ class DatabaseBookRepository implements BookRepositoryInterface
 {
     private PDO $connection;
 
-    public function __construct(DatabaseConnection $database)
+    public function __construct(PDO $pdo)
     {
-        $this->connection = $database->getConnection();
+        $this->connection = $pdo;
     }
 
     /**
@@ -21,7 +21,7 @@ class DatabaseBookRepository implements BookRepositoryInterface
      */
     public function getBooksByAuthorId(int $authorId): array
     {
-        $query = "SELECT id, title, publication_year AS year FROM Books WHERE author_id = :author_id ORDER BY publication_year DESC, title ASC";
+        $query = "SELECT id, title, year FROM Books WHERE author_id = :author_id ORDER BY year DESC, title ASC";
         $statement = $this->connection->prepare($query);
         $statement->execute(['author_id' => $authorId]);
         return $statement->fetchAll();
@@ -32,7 +32,7 @@ class DatabaseBookRepository implements BookRepositoryInterface
      */
     public function findBookById(int $bookId): ?array
     {
-        $query = "SELECT id, title, publication_year AS year, author_id FROM Books WHERE id = :id";
+        $query = "SELECT id, title, year, author_id FROM Books WHERE id = :id";
         $statement = $this->connection->prepare($query);
         $statement->execute(['id' => $bookId]);
         $book = $statement->fetch();
@@ -44,7 +44,7 @@ class DatabaseBookRepository implements BookRepositoryInterface
      */
     public function addBook(string $title, int $year, int $authorId): ?array
     {
-        $query = "INSERT INTO Books (title, publication_year, author_id) VALUES (:title, :year, :author_id)";
+        $query = "INSERT INTO Books (title, year, author_id) VALUES (:title, :year, :author_id)";
         try {
             $statement = $this->connection->prepare($query);
             $success = $statement->execute([
@@ -73,7 +73,7 @@ class DatabaseBookRepository implements BookRepositoryInterface
             return null;
         }
 
-        $query = "UPDATE Books SET title = :title, publication_year = :year WHERE id = :id";
+        $query = "UPDATE Books SET title = :title, year = :year WHERE id = :id";
         try {
             $statement = $this->connection->prepare($query);
             $success = $statement->execute([

@@ -44,7 +44,10 @@ document.addEventListener('DOMContentLoaded', () => {
     function loadBooks() {
         fetchAuthorBooks(authorId)
             .then(books => renderBooks(books))
-            .catch(err => console.error('Error loading books:', err))
+            .catch(err => {
+                console.error('Error loading books:', err)
+                window.location.replace(`error.phtml?message=${encodeURIComponent(err.message)}`)
+            })
     }
 
     function renderBooks(books) {
