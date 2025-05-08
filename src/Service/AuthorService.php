@@ -5,7 +5,7 @@ namespace BookStore\Service;
 use BookStore\Repository\AuthorRepositoryInterface;
 use BookStore\Repository\BookRepositoryInterface;
 
-class AuthorService
+class AuthorService implements AuthorServiceInterface
 {
     private AuthorRepositoryInterface $authorRepository;
     private BookRepositoryInterface $bookRepository;
@@ -36,11 +36,11 @@ class AuthorService
      *
      * @param $firstName
      * @param $lastName
-     * @param $errors
+     * @param array $errors
      *
      * @return void
      */
-    public function addAuthor($firstName, $lastName, &$errors): void
+    public function addAuthor($firstName, $lastName, array &$errors): void
     {
         if (!$this->validateName($firstName, $lastName, $errors)) {
             return;
@@ -86,7 +86,6 @@ class AuthorService
             $this->bookRepository->deleteBook($book['id']);
         }
     }
-
 
     /**
      * Returns an author with provided id

@@ -55,7 +55,7 @@ class BookController
         $updatedBook = $this->bookService->editBook($id, $title, (string)$year, $errors);
 
         if (!empty($errors)) {
-            return JsonResponse::createBadRequest();
+            return JsonResponse::createBadRequest($errors);
         }
 
         if (!$this->bookService->getBookById($id)) {

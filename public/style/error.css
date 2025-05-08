@@ -1,0 +1,109 @@
+/* BookStore/public/style/error_page.css */
+
+/* Basic body styling */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    background-color: #f0f2f5; /* A light grey background */
+    color: #1c1e21; /* Standard dark grey text color */
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    min-height: 90vh; /* Take at least 90% of the viewport height */
+    text-align: center; /* Center text within the container */
+    box-sizing: border-box;
+}
+
+/* Container for the error message content */
+.error-container {
+    background-color: #ffffff; /* White background for the container */
+    padding: 30px 40px;
+    border-radius: 12px; /* Softer rounded corners */
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08); /* A slightly more pronounced shadow */
+    max-width: 600px; /* Maximum width of the error box */
+    width: 90%; /* Responsive width */
+    border: 1px solid #ddd; /* Subtle border */
+}
+
+/* Styling for the main error heading */
+.error-container h1 {
+    color: #d9534f; /* A common error red color */
+    margin-top: 0; /* Remove default top margin from h1 */
+    margin-bottom: 20px;
+    font-size: 2em; /* Larger font size for the heading */
+    font-weight: 600;
+}
+
+/* Styling for the error message paragraph */
+.error-message {
+    color: #4b4f56; /* A slightly softer dark grey for the message */
+    font-size: 1.1em;
+    margin-bottom: 30px;
+    line-height: 1.6; /* Improved readability */
+}
+
+/* Container for action links/buttons */
+.error-actions {
+    margin-top: 20px;
+}
+
+/* Styling for the links (buttons) */
+.back-link,
+.home-link {
+    display: inline-block;
+    margin: 10px 8px; /* Space around the buttons */
+    padding: 12px 25px; /* Padding inside the buttons */
+    color: white;
+    text-decoration: none;
+    border-radius: 8px; /* Rounded corners for buttons */
+    font-weight: 600;
+    font-size: 1em;
+    transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out; /* Smooth transitions */
+    border: none; /* Remove default border */
+    cursor: pointer;
+}
+
+.back-link {
+    background-color: #6c757d; /* A neutral grey for "Go Back" */
+}
+
+.back-link:hover,
+.back-link:focus {
+    background-color: #5a6268; /* Darker grey on hover/focus */
+    transform: translateY(-1px); /* Slight lift effect */
+}
+
+.home-link {
+    background-color: #007bff; /* A primary blue for "Homepage" */
+}
+
+.home-link:hover,
+.home-link:focus {
+    background-color: #0056b3; /* Darker blue on hover/focus */
+    transform: translateY(-1px); /* Slight lift effect */
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .error-container {
+        padding: 20px;
+    }
+
+    .error-container h1 {
+        font-size: 1.8em;
+    }
+
+    .error-message {
+        font-size: 1em;
+    }
+
+    .back-link,
+    .home-link {
+        padding: 10px 18px;
+        font-size: 0.95em;
+        display: block; /* Stack buttons on small screens */
+        width: calc(100% - 16px); /* Full width minus margins */
+        box-sizing: border-box;
+    }
+}

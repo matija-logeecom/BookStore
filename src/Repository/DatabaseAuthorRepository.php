@@ -9,9 +9,9 @@ class DatabaseAuthorRepository implements AuthorRepositoryInterface
 {
     private PDO $connection;
 
-    public function __construct(DatabaseConnection $database)
+    public function __construct(PDO $connection)
     {
-        $this->connection = $database->getConnection();
+       $this->connection = $connection;
     }
 
     /**
@@ -22,7 +22,7 @@ class DatabaseAuthorRepository implements AuthorRepositoryInterface
     public function getAll(): array
     {
         $query = "SELECT * FROM Authors";
-        $statement = $this->connection->query($query);
+        $statement = DatabaseConnection::getInstance()->getConnection()->query($query);
         return $statement->fetchAll();
     }
 
@@ -69,7 +69,6 @@ class DatabaseAuthorRepository implements AuthorRepositoryInterface
         $statement->execute(['id' => $authorId]);
     }
 
-
     /**
      * Retrieves an author with provided id from current session
      *
@@ -83,12 +82,4 @@ class DatabaseAuthorRepository implements AuthorRepositoryInterface
 
         return current(array_filter($authors, fn($a) => $a['id'] === $authorId));
     }
-
-    /**
-     * Retrieves index of author with provided id from current session
-     *
-     * @param $authorId
-     *
-     * @return int|null
-     */
 }

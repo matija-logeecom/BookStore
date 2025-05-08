@@ -9,6 +9,7 @@ require_once __DIR__ . "/../vendor/autoload.php";
 use BookStore\Controller\AuthorController;
 use BookStore\Controller\BookController;
 use BookStore\Infrastructure\ServiceRegistry;
+use BookStore\Infrastructure\Bootstrap;
 use BookStore\Response\HtmlResponse;
 use BookStore\Response\JsonResponse;
 
@@ -18,6 +19,12 @@ $requestMethod = $_SERVER['REQUEST_METHOD'];
 $requestUri = $_SERVER['REQUEST_URI'];
 
 $routePath = str_replace($basePath, '', parse_url($requestUri, PHP_URL_PATH));
+
+try {
+    Bootstrap::init();
+} catch (Exception $e) {
+    echo $e->getMessage();
+}
 
 try {
     if (!str_starts_with($routePath, '/api/')) {

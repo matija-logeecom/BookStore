@@ -29,7 +29,7 @@ class JsonResponse extends Response
         return new self(['error' => $message], 400);
     }
 
-    public static function createInternalServerError(string $message = "Bad Request."): self
+    public static function createInternalServerError(string $message = "Internal server error."): self
     {
         return new self(['error' => $message], 500);
     }

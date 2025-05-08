@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error</title>
+    <link rel="stylesheet" href="../style/error.css">
+</head>
+<body>
+<div class="error-container">
+    <h1>An Error Occurred</h1>
+    <p class="error-message">
+        <?php
+        if (isset($_GET['message']) && !empty(trim($_GET['message']))) {
+            echo htmlspecialchars(trim($_GET['message']));
+        } else {
+            echo "An unspecified error occurred. Please try again.";
+        }
+        ?>
+    </p>
+    <div class="error-actions">
+        <a href="javascript:history.back()" class="back-link">Go Back</a>
+        <a href="../index.php" class="home-link">Go to Homepage</a>
+    </div>
+</div>
+</body>
+</html>

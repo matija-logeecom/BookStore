@@ -4,7 +4,7 @@ namespace BookStore\Service;
 
 use BookStore\Repository\BookRepositoryInterface;
 
-class BookService
+class BookService implements BookServiceInterface
 {
     private BookRepositoryInterface $bookRepository;
 

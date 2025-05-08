@@ -69,7 +69,8 @@
     font-size: 0.9em;
 }
 
-.form-wrapper input[type="text"] {
+.form-wrapper input[type="text"],
+.form-wrapper input[type="number"] {
     width: 100%;
     padding: 10px; /* Slightly larger padding */
     box-sizing: border-box;

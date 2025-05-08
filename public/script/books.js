@@ -163,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
         fieldset.appendChild(yearLabel)
 
         const yearInput = document.createElement('input')
-        yearInput.type = 'text'
+        yearInput.type = 'number'
         yearInput.id = 'year'
         yearInput.name = 'year'
         yearInput.value = book.year
@@ -201,7 +201,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     formWrapper.remove()
                     loadBooks()
                 })
-                .catch(error => console.error('Error updating book:', error))
+                .catch(error => {
+                    console.error('Error updating book:', error)
+                    window.location.href = `error.phtml?message=${encodeURIComponent(error.message)}`
+                })
         }
 
         document.body.classList.add('overlay-active')
@@ -244,7 +247,7 @@ document.addEventListener('DOMContentLoaded', () => {
         fieldset.appendChild(yearLabel)
 
         const yearInput = document.createElement('input')
-        yearInput.type = 'text'
+        yearInput.type = 'number'
         yearInput.id = 'year'
         yearInput.name = 'year'
         yearInput.value = ''
@@ -282,7 +285,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     formWrapper.remove()
                     loadBooks()
                 })
-                .catch(err => console.error('Error creating book:', err))
+                .catch(error => {
+                    console.error('Error creating book:', error)
+                    window.location.href = `error.phtml?message=${encodeURIComponent(error.message)}`
+                })
         }
 
         document.body.classList.add('overlay-active')
