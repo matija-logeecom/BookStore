@@ -1,9 +1,9 @@
 <?php
 
-namespace BookStore\Service;
+namespace BookStore\Business\Service;
 
-use BookStore\Repository\AuthorRepositoryInterface;
-use BookStore\Repository\BookRepositoryInterface;
+use BookStore\Business\Repository\AuthorRepositoryInterface;
+use BookStore\Business\Repository\BookRepositoryInterface;
 
 class AuthorService implements AuthorServiceInterface
 {

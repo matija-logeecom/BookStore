@@ -1,8 +1,9 @@
 <?php
 
-namespace BookStore\Repository;
+namespace BookStore\Data\Repository;
 
-use BookStore\Database\DatabaseConnection;
+use BookStore\Business\Repository\AuthorRepositoryInterface;
+use BookStore\Infrastructure\Database\DatabaseConnection;
 use PDO;
 
 class DatabaseAuthorRepository implements AuthorRepositoryInterface

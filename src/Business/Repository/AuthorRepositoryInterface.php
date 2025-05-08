@@ -1,6 +1,6 @@
 <?php
 
-namespace BookStore\Repository;
+namespace BookStore\Business\Repository;
 
 /**
  * Defines the contract for managing author data

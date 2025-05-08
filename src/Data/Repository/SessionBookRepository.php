@@ -1,6 +1,8 @@
 <?php
 
-namespace BookStore\Repository;
+namespace BookStore\Data\Repository;
+
+use BookStore\Business\Repository\BookRepositoryInterface;
 
 class SessionBookRepository implements BookRepositoryInterface
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace BookStore\Service;
+namespace BookStore\Business\Service;
 
 interface AuthorServiceInterface
 {

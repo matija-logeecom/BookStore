@@ -6,12 +6,12 @@ if (session_status() == PHP_SESSION_NONE) {
 
 require_once __DIR__ . "/../vendor/autoload.php";
 
-use BookStore\Controller\AuthorController;
-use BookStore\Controller\BookController;
-use BookStore\Infrastructure\ServiceRegistry;
 use BookStore\Infrastructure\Bootstrap;
-use BookStore\Response\HtmlResponse;
-use BookStore\Response\JsonResponse;
+use BookStore\Infrastructure\ServiceRegistry;
+use BookStore\Presentation\Controller\AuthorController;
+use BookStore\Presentation\Controller\BookController;
+use BookStore\Presentation\Response\HtmlResponse;
+use BookStore\Presentation\Response\JsonResponse;
 
 $basePath = '';
 

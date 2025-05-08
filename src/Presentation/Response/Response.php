@@ -1,6 +1,6 @@
 <?php
 
-namespace BookStore\Response;
+namespace BookStore\Presentation\Response;
 
 abstract class Response
 {

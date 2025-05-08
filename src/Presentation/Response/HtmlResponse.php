@@ -1,6 +1,6 @@
 <?php
 
-namespace BookStore\Response;
+namespace BookStore\Presentation\Response;
 
 class HtmlResponse extends Response
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace BookStore\Response;
+namespace BookStore\Presentation\Response;
 
 class JsonResponse extends Response
 {

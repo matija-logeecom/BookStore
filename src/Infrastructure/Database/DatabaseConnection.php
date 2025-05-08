@@ -1,10 +1,10 @@
 <?php
 
-namespace BookStore\Database;
+namespace BookStore\Infrastructure\Database;
 
+use Exception;
 use PDO;
 use PDOException;
-use Exception;
 
 class DatabaseConnection
 {

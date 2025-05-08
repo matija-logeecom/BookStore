@@ -1,8 +1,8 @@
 <?php
 
-namespace BookStore\Service;
+namespace BookStore\Business\Service;
 
-use BookStore\Repository\BookRepositoryInterface;
+use BookStore\Business\Repository\BookRepositoryInterface;
 
 class BookService implements BookServiceInterface
 {

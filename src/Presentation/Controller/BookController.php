@@ -1,9 +1,9 @@
 <?php
 
-namespace BookStore\Controller;
+namespace BookStore\Presentation\Controller;
 
-use BookStore\Service\BookService;
-use BookStore\Response\JsonResponse;
+use BookStore\Business\Service\BookService;
+use BookStore\Presentation\Response\JsonResponse;
 
 class BookController
 {
@@ -55,7 +55,7 @@ class BookController
         $updatedBook = $this->bookService->editBook($id, $title, (string)$year, $errors);
 
         if (!empty($errors)) {
-            return JsonResponse::createBadRequest($errors);
+            return JsonResponse::createBadRequest();
         }
 
         if (!$this->bookService->getBookById($id)) {
