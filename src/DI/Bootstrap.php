@@ -1,6 +1,6 @@
 <?php
 
-namespace BookStore\Infrastructure;
+namespace BookStore\DI;
 
 use BookStore\Business\Repository\AuthorRepositoryInterface;
 use BookStore\Business\Repository\BookRepositoryInterface;
@@ -10,8 +10,8 @@ use BookStore\Business\Service\BookService;
 use BookStore\Business\Service\BookServiceInterface;
 use BookStore\Data\Repository\DatabaseAuthorRepository;
 use BookStore\Data\Repository\DatabaseBookRepository;
-use BookStore\Data\Repository\SessionBookRepository;
 use BookStore\Data\Repository\SessionAuthorRepository;
+use BookStore\Data\Repository\SessionBookRepository;
 use BookStore\Presentation\Controller\AuthorController;
 use BookStore\Presentation\Controller\BookController;
 use Exception;

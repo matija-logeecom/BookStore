@@ -1,17 +1,17 @@
 {
-    "name": "matija/book-store",
-    "autoload": {
-        "psr-4": {
-            "BookStore\\": "src/"
-        }
-    },
-    "authors": [
-        {
-            "name": "Matija Stankovic",
-            "email": "matija.stankovic@logeecom.com"
-        }
-    ],
-    "require": {
-      "ext-pdo": "*"
+  "name": "matija/book-store",
+  "autoload": {
+    "psr-4": {
+      "BookStore\\": "src/"
     }
+  },
+  "authors": [
+    {
+      "name": "Matija Stankovic",
+      "email": "matija.stankovic@logeecom.com"
+    }
+  ],
+  "require": {
+    "ext-pdo": "*"
+  }
 }

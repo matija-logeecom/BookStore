@@ -1,21 +1,32 @@
-body { font-family: sans-serif; padding: 20px; }
+body {
+    font-family: sans-serif;
+    padding: 20px;
+}
+
 .form-wrapper {
     width: 300px;
     margin: 0 auto;
     border: 1px solid #ccc;
     padding: 20px;
 }
+
 label {
     display: block;
     margin-top: 10px;
 }
+
 input[type="text"] {
-    width: 100%; padding: 8px; box-sizing: border-box; margin-top: 5px;
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    margin-top: 5px;
 }
+
 .error {
     color: red;
     font-size: 0.9em;
 }
+
 button {
     margin-top: 15px;
     width: 50%;
@@ -32,7 +43,12 @@ button {
 .button-div {
     text-align: right;
 }
-fieldset { border: none; padding: 0; }
+
+fieldset {
+    border: none;
+    padding: 0;
+}
+
 .legend-div {
     border-bottom: 2px solid #ddd;
     padding-bottom: 12px;

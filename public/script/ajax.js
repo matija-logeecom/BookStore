@@ -18,7 +18,7 @@ export async function sendData(url, method = "POST", data = {}) {
     try {
         const response = await fetch(url, {
             method,
-            headers: { 'Content-Type': 'application/json' },
+            headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(data)
         })
         if (!response.ok) throw new Error("Error sending data.")

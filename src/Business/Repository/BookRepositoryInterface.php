@@ -14,7 +14,7 @@ interface BookRepositoryInterface
      *
      * @param int $authorId The ID of the author.
      *
-     * @return array A list of books, each as an associative array.
+     * @return Book[] A list of books, each as an associative array.
      */
     public function getBooksByAuthorId(int $authorId): array;
 
@@ -41,7 +41,7 @@ interface BookRepositoryInterface
      *
      * @param Book $book
      *
-     * @return array|null The updated book data as an associative array, or null on failure or if not found.
+     * @return Book|null The updated book data as an associative array, or null on failure or if not found.
      */
     public function updateBook(Book $book): ?Book;
 

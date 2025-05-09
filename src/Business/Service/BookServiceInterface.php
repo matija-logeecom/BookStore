@@ -12,9 +12,10 @@ interface BookServiceInterface
      *
      * @param Author $author
      *
-     * @return array
+     * @return Book[]
      */
     public function getBooksByAuthor(Author $author): array;
+
     /**
      * Retrieves a single book by its ID.
      *
@@ -28,7 +29,7 @@ interface BookServiceInterface
      * Adds a new book after validation.
      *
      * @param Book $book
-     * @param array &$errors Passed by reference to populate with validation errors.
+     * @param array $errors Passed by reference to populate with validation errors.
      *
      * @return Book|null The new book data if successful, null otherwise.
      */
@@ -38,7 +39,7 @@ interface BookServiceInterface
      * Edits an existing book after validation.
      *
      * @param Book $book
-     * @param array &$errors Passed by reference to populate with validation errors.
+     * @param array $errors Passed by reference to populate with validation errors.
      *
      * @return Book|null The updated book data if successful, null otherwise.
      */

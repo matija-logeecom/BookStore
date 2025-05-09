@@ -13,7 +13,7 @@ interface AuthorRepositoryInterface
     /**
      * Retrieves a list of all authors
      *
-     * @return array
+     * @return Author[]
      */
     public function getAll(): array;
 

@@ -1,4 +1,4 @@
-import { fetchAuthorBooks, sendData, getQueryParameter } from './ajax.js'
+import {fetchAuthorBooks, sendData, getQueryParameter} from './ajax.js'
 
 document.addEventListener('DOMContentLoaded', () => {
     const appContainer = document.getElementById('app-container')

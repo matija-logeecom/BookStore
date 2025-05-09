@@ -4,12 +4,19 @@ namespace BookStore\Data\Repository;
 
 use BookStore\Business\Repository\AuthorRepositoryInterface;
 use BookStore\Business\Model\Author;
+use BookStore\Infrastructure\Session\SessionManager;
+
 class SessionAuthorRepository implements AuthorRepositoryInterface
 {
     public function __construct()
     {
-        $_SESSION['authors'] = $_SESSION['authors'] ?? [];
-        $_SESSION['currentId'] = $_SESSION['currentId'] ?? 1;
+        if (!SessionManager::getInstance()->has('authors')) {
+            SessionManager::getInstance()->set('authors', []);
+        }
+
+        if (!SessionManager::getInstance()->has('currentId')) {
+            SessionManager::getInstance()->set('currentId', 1);
+        }
     }
 
     /**
@@ -17,7 +24,7 @@ class SessionAuthorRepository implements AuthorRepositoryInterface
      */
     public function getAll(): array
     {
-        $authors = $_SESSION['authors'];
+        $authors = SessionManager::getInstance()->get('authors');
 
         $authorModels = [];
         foreach ($authors as $author) {
@@ -32,7 +39,17 @@ class SessionAuthorRepository implements AuthorRepositoryInterface
      */
     public function addAuthor(Author $author): void
     {
-        $_SESSION['authors'][] = ['id' => $_SESSION['currentId']++, 'name' => $author->getName(), 'books' => 0];
+        $authors = SessionManager::getInstance()->get('authors');
+        $currentId = SessionManager::getInstance()->get('currentId');
+
+        $newAuthor = [
+            'id' => $currentId,
+            'name' => $author->getName(),
+        ];
+
+        $authors[] = $newAuthor;
+        SessionManager::getInstance()->set('authors', $authors);
+        SessionManager::getInstance()->set('currentId', $currentId + 1);
     }
 
     /**
@@ -41,7 +58,10 @@ class SessionAuthorRepository implements AuthorRepositoryInterface
     public function editAuthor(Author $author): void
     {
         $authorIndex = $this->getAuthorIndex($author->getId());
-        $_SESSION['authors'][$authorIndex]['name'] = $author->getName();
+        $authors = SessionManager::getInstance()->get('authors');
+
+        $authors[$authorIndex]['name'] = $author->getName();
+        SessionManager::getInstance()->set('authors', $authors);
     }
 
     /**
@@ -49,7 +69,8 @@ class SessionAuthorRepository implements AuthorRepositoryInterface
      */
     public function deleteAuthor(int $authorId): void
     {
-        $_SESSION['authors'] = array_filter($_SESSION['authors'], fn($a) => $a['id'] !== $authorId);
+        $filteredAuthors = array_filter(SessionManager::getInstance()->get('authors'), fn($a) => $a['id'] !== $authorId);
+        SessionManager::getInstance()->set('authors', $filteredAuthors);
     }
 
     /**
@@ -71,7 +92,7 @@ class SessionAuthorRepository implements AuthorRepositoryInterface
      */
     private function getAuthorIndex($authorId): ?int
     {
-        $authors = $_SESSION['authors'];
+        $authors = SessionManager::getInstance()->get('authors');
         foreach ($authors as $index => $author) {
             if ($author['id'] === $authorId) {
                 return $index;
@@ -91,7 +112,7 @@ class SessionAuthorRepository implements AuthorRepositoryInterface
     private function bookCount(int $authorId): int
     {
         $bookCounter = 0;
-        foreach ($_SESSION['books'] as $book) {
+        foreach (SessionManager::getInstance()->get('books') as $book) {
             if ($book['author_id'] === $authorId) {
                 $bookCounter++;
             }

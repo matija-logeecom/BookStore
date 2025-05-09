@@ -9,7 +9,7 @@ interface AuthorServiceInterface
     /**
      * Retrieves a list of all authors in current session
      *
-     * @return array
+     * @return Author[]
      */
     public function getAuthorList(): array;
 
@@ -27,11 +27,11 @@ interface AuthorServiceInterface
      * Changes name of author with provided id to provided name
      *
      * @param Author $author
-     * @param $errors
+     * @param array $errors
      *
      * @return void
      */
-    public function editAuthor(Author $author, &$errors): void;
+    public function editAuthor(Author $author, array &$errors): void;
 
     /**
      * Deletes an author with provided id from current session
@@ -47,7 +47,7 @@ interface AuthorServiceInterface
      *
      * @param int $id
      *
-     * @return array|null
+     * @return Author|null
      */
     public function getAuthorById(int $id): ?Author;
 }

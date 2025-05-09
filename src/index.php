@@ -6,8 +6,8 @@ if (session_status() == PHP_SESSION_NONE) {
 
 require_once __DIR__ . "/../vendor/autoload.php";
 
-use BookStore\Infrastructure\Bootstrap;
-use BookStore\Infrastructure\ServiceRegistry;
+use BookStore\DI\Bootstrap;
+use BookStore\DI\ServiceRegistry;
 use BookStore\Presentation\Controller\AuthorController;
 use BookStore\Presentation\Controller\BookController;
 use BookStore\Presentation\Response\HtmlResponse;
@@ -63,22 +63,18 @@ try {
     // GET /api/books
     if ($requestMethod === 'GET' && $routePath === '/api/books') {
         $bookController->getBooksByAuthor()->view();
-    }
-    // POST /api/books/create
+    } // POST /api/books/create
     elseif ($requestMethod === 'POST' && $routePath === '/api/books/create') {
         $bookController->createBook()->view();
-    }
-    // POST /api/books/{id}/edit
+    } // POST /api/books/{id}/edit
     elseif ($requestMethod === 'POST' && preg_match('/^\/api\/books\/(\d+)\/edit$/', $routePath, $matches)) {
         $bookId = (int)$matches[1];
         $bookController->editBook($bookId)->view();
-    }
-    // POST /api/books/{id}/delete
+    } // POST /api/books/{id}/delete
     elseif ($requestMethod === 'POST' && preg_match('/^\/api\/books\/(\d+)\/delete$/', $routePath, $matches)) {
         $bookId = (int)$matches[1];
         $bookController->deleteBook($bookId)->view();
-    }
-    else {
+    } else {
         JsonResponse::createNotFound()->view();
     }
 

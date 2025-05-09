@@ -114,11 +114,13 @@
     padding-bottom: 15px;
     margin-bottom: 20px;
 }
+
 .modal .modal-header h2 {
     margin: 0 0 0 12px; /* Space after icon */
     font-size: 1.3em;
     font-weight: bold;
 }
+
 .modal .exclamation-icon {
     font-size: 1.8em; /* Make icon bigger */
     color: #f0ad4e; /* Warning color */
@@ -131,6 +133,7 @@
     line-height: 1.6; /* Better readability */
     color: #333; /* Slightly darker text */
 }
+
 .modal .modal-body b { /* Make book title stand out */
     color: #000;
 }
@@ -160,6 +163,7 @@
     color: #333;
     border-color: #ccc;
 }
+
 .modal .modal-footer #cancelButton:hover {
     background-color: #e0e0e0;
     border-color: #bbb;
@@ -170,6 +174,7 @@
     color: white;
     border-color: #d43f3a;
 }
+
 .modal .modal-footer #deleteButton:hover {
     background-color: #c9302c;
     border-color: #ac2925;

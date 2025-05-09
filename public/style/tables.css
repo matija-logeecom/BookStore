@@ -3,36 +3,43 @@ body {
     margin: 0;
     padding: 20px;
 }
+
 h1 {
     text-align: center;
     margin-bottom: 30px;
 }
+
 .container {
     max-width: 1000px;
     margin: 0 auto;
 }
+
 table {
     width: 100%;
     border-collapse: collapse;
     margin: 20px auto;
     border-bottom: 2px solid #ddd;
 }
+
 th, td {
     padding: 12px 15px;
     text-align: left;
 }
+
 th {
     border-bottom: 2px solid #ddd;
     font-weight: normal;
     color: #555;
 }
+
 td {
     border-bottom: none;
 }
 
-.author-col, .book-col{
+.author-col, .book-col {
     width: 60%;
 }
+
 .books-col, .actions-col {
     width: 20%;
     text-align: right;
@@ -57,6 +64,7 @@ img {
     width: 32px;
     padding-right: 16px;
 }
+
 .book-count {
     display: inline-flex;
     align-items: center;
@@ -67,11 +75,13 @@ img {
     border-radius: 50%;
     color: #555;
 }
+
 .actions {
     display: flex;
     gap: 8px;
     justify-content: flex-end;
 }
+
 .button {
     display: flex;
     align-items: center;
@@ -105,6 +115,7 @@ img {
     height: 42px;
     width: 42px;
 }
+
 a {
     text-decoration: none;
     color: inherit;

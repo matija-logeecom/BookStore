@@ -8,7 +8,7 @@ class HtmlResponse extends Response
 
     private string $path;
 
-    public function __construct(string $html, array $variables = [],  int $statusCode = 200, array $headers = [])
+    public function __construct(string $html, array $variables = [], int $statusCode = 200, array $headers = [])
     {
         parent::__construct($html, $statusCode, $headers);
 

@@ -15,15 +15,15 @@
 
     /* Appearance */
     background-color: #fefefe; /* Standard white background */
-    padding: 25px 30px;        /* Padding around the content */
-    border: 1px solid #ccc;     /* Subtle border */
-    border-radius: 10px;        /* Rounded corners for the dialog itself */
+    padding: 25px 30px; /* Padding around the content */
+    border: 1px solid #ccc; /* Subtle border */
+    border-radius: 10px; /* Rounded corners for the dialog itself */
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Softer shadow */
 
     /* Sizing */
-    width: 90%;                 /* Responsive width */
-    max-width: 500px;           /* Max width for larger screens */
-    min-width: 300px;           /* Minimum width */
+    width: 90%; /* Responsive width */
+    max-width: 500px; /* Max width for larger screens */
+    min-width: 300px; /* Minimum width */
     box-sizing: border-box;
 }
 
