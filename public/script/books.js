@@ -323,7 +323,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const modalBody = document.createElement('div')
         modalBody.className = 'modal-body'
         const p = document.createElement('p')
-        p.textContent = `You are about to delete the book ${book.title}. If you proceed with this action, the application will permanently delete this book from the database.`
+        p.textContent = `
+            You are about to delete the book ${book.title}.
+            If you proceed with this action, the application will permanently delete this book from the database.
+        `
         modalBody.appendChild(p)
         modalContent.appendChild(modalBody)
 

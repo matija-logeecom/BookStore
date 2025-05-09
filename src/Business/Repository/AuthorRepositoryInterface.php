@@ -2,7 +2,7 @@
 
 namespace BookStore\Business\Repository;
 
-use BookStore\Business\Model\Author;
+use BookStore\Business\Model\Author\Author;
 
 /**
  * Defines the contract for managing author data

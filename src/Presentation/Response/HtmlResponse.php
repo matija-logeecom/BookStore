@@ -20,20 +20,9 @@ class HtmlResponse extends Response
         $this->path = $html;
     }
 
-//    public static function createResponse(string $path, int $statusCode = 200, array $headers = [],
-//                                          array  $variables = []): HtmlResponse
-//    {
-//        extract($variables);
-//
-//        ob_start();
-//        if (!empty($path)) {
-//            include $path;
-//        }
-//        $html = ob_get_clean();
-//
-//        return new self($html, $statusCode, $headers);
-//    }
-
+    /**
+     * @inheritDoc
+     */
     public function view(): void
     {
         extract($this->variables);
@@ -45,23 +34,33 @@ class HtmlResponse extends Response
         $content = ob_get_clean();
 
         $this->sendHeaders();
+        $this->sendStatusCode();
         echo $content;
     }
 
+    /**
+     * @inheritDoc
+     */
     public static function createNotFound(string $message = "Page not found."): self
     {
-        return new self("<h1>404 Not Found</h1><p>" . htmlspecialchars($message) . "</p>", 404);
+        return new self("<h1>404 Not Found</h1><p>" . htmlspecialchars($message) . "</p>", statusCode: 404);
     }
 
+    /**
+     * @inheritDoc
+     */
     public static function createBadRequest(string $message = "Bad Request."): self
     {
-        return new self("<h1>400 Bad Request</h1><p>" . htmlspecialchars($message) . "</p>", 400);
+        return new self("<h1>400 Bad Request</h1><p>" . htmlspecialchars($message) . "</p>", statusCode: 400);
     }
 
+    /**
+     * @inheritDoc
+     */
     public static function createInternalServerError(string $message = "Bad Request."): self
     {
         return new self("<h1>500 Internal Server Error</h1><p>"
             . htmlspecialchars($message)
-            . "</p>", 500);
+            . "</p>", statusCode: 500);
     }
 }

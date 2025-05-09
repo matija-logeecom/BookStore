@@ -1,10 +1,10 @@
 <?php
 
-namespace BookStore\Business\Service;
+namespace BookStore\Business\Service\Book;
 
-use BookStore\Business\Model\Author;
+use BookStore\Business\Model\Author\Author;
+use BookStore\Business\Model\Book\Book;
 use BookStore\Business\Repository\BookRepositoryInterface;
-use BookStore\Business\Model\Book;
 
 class BookService implements BookServiceInterface
 {
@@ -64,7 +64,7 @@ class BookService implements BookServiceInterface
     }
 
     /**
-     * @param Book $book
+     * @param \BookStore\Business\Model\Book\Book $book
      * @param array &$errors
      *
      * @return bool True if valid, false otherwise.

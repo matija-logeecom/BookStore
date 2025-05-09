@@ -2,8 +2,8 @@
 
 namespace BookStore\Presentation\Controller;
 
-use BookStore\Business\Model\Author;
-use BookStore\Business\Service\AuthorService;
+use BookStore\Business\Model\Author\Author;
+use BookStore\Business\Service\Author\AuthorService;
 use BookStore\Presentation\Response\HtmlResponse;
 use BookStore\Presentation\Response\Response;
 

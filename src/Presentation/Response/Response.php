@@ -15,21 +15,42 @@ abstract class Response
         $this->statusCode = $statusCode;
     }
 
+    /**
+     * Getter for body
+     *
+     * @return mixed
+     */
     public function getBody(): mixed
     {
         return $this->body;
     }
 
+    /**
+     * Setter for body
+     *
+     * @param mixed $body
+     * @return void
+     */
     public function setBody(mixed $body): void
     {
         $this->body = $body;
     }
 
+    /**
+     * Getter for headers
+     *
+     * @return array
+     */
     public function getHeaders(): array
     {
         return $this->headers;
     }
 
+    /**
+     * Sends headers
+     *
+     * @return void
+     */
     protected function sendHeaders(): void
     {
         if (headers_sent()) {
@@ -38,18 +59,50 @@ abstract class Response
             return;
         }
 
-        http_response_code($this->statusCode);
         foreach ($this->headers as $name => $value) {
             header($name . ': ' . $value);
         }
     }
 
+    /**
+     * Sends status code
+     *
+     * @return void
+     */
+    protected function sendStatusCode(): void
+    {
+        http_response_code($this->statusCode);
+    }
+
+    /**
+     * Renders page
+     *
+     * @return void
+     */
     abstract public function view(): void;
 
+    /**
+     * Creates not found response
+     *
+     * @param string $message
+     * @return self
+     */
     abstract static public function createNotFound(string $message = "Page not found."): self;
 
+    /**
+     * Creates bad request response
+     *
+     * @param string $message
+     * @return self
+     */
     abstract public static function createBadRequest(string $message = "Bad Request."): self;
 
+    /**
+     * Creates internal server error response
+     *
+     * @param string $message
+     * @return self
+     */
     abstract public static function createInternalServerError(string $message =
                                                               "An internal server error occurred."): self;
 }

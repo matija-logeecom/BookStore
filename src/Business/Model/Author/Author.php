@@ -1,6 +1,6 @@
 <?php
 
-namespace BookStore\Business\Model;
+namespace BookStore\Business\Model\Author;
 
 class Author
 {

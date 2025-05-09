@@ -1,17 +1,16 @@
 <?php
 
-namespace BookStore\DI;
+namespace BookStore;
 
 use BookStore\Business\Repository\AuthorRepositoryInterface;
 use BookStore\Business\Repository\BookRepositoryInterface;
-use BookStore\Business\Service\AuthorService;
-use BookStore\Business\Service\AuthorServiceInterface;
-use BookStore\Business\Service\BookService;
-use BookStore\Business\Service\BookServiceInterface;
-use BookStore\Data\Repository\DatabaseAuthorRepository;
-use BookStore\Data\Repository\DatabaseBookRepository;
-use BookStore\Data\Repository\SessionAuthorRepository;
-use BookStore\Data\Repository\SessionBookRepository;
+use BookStore\Business\Service\Author\AuthorService;
+use BookStore\Business\Service\Author\AuthorServiceInterface;
+use BookStore\Business\Service\Book\BookService;
+use BookStore\Business\Service\Book\BookServiceInterface;
+use BookStore\Data\Repository\Author\DatabaseAuthorRepository;
+use BookStore\Data\Repository\Book\DatabaseBookRepository;
+use BookStore\DI\ServiceRegistry;
 use BookStore\Presentation\Controller\AuthorController;
 use BookStore\Presentation\Controller\BookController;
 use Exception;
@@ -30,6 +29,11 @@ class Bootstrap
         self::registerControllers();
     }
 
+    /**
+     * Creates and sets repositories
+     *
+     * @return void
+     */
     private static function registerRepositories(): void
     {
         ServiceRegistry::set(BookRepositoryInterface::class,
@@ -42,6 +46,8 @@ class Bootstrap
     }
 
     /**
+     * Creates and sets services
+     *
      * @throws Exception
      */
     private static function registerServices(): void
@@ -61,6 +67,8 @@ class Bootstrap
     }
 
     /**
+     * Creates and sets controllers
+     *
      * @throws Exception
      */
     private static function registerControllers(): void

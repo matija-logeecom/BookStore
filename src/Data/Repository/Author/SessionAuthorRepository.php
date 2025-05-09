@@ -1,9 +1,9 @@
 <?php
 
-namespace BookStore\Data\Repository;
+namespace BookStore\Data\Repository\Author;
 
+use BookStore\Business\Model\Author\Author;
 use BookStore\Business\Repository\AuthorRepositoryInterface;
-use BookStore\Business\Model\Author;
 use BookStore\Infrastructure\Session\SessionManager;
 
 class SessionAuthorRepository implements AuthorRepositoryInterface
@@ -69,7 +69,9 @@ class SessionAuthorRepository implements AuthorRepositoryInterface
      */
     public function deleteAuthor(int $authorId): void
     {
-        $filteredAuthors = array_filter(SessionManager::getInstance()->get('authors'), fn($a) => $a['id'] !== $authorId);
+        $filteredAuthors = array_filter(
+            SessionManager::getInstance()->get('authors'), fn($a) => $a['id'] !== $authorId
+        );
         SessionManager::getInstance()->set('authors', $filteredAuthors);
     }
 

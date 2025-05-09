@@ -1,10 +1,10 @@
 <?php
 
-namespace BookStore\Business\Service;
+namespace BookStore\Business\Service\Author;
 
+use BookStore\Business\Model\Author\Author;
 use BookStore\Business\Repository\AuthorRepositoryInterface;
 use BookStore\Business\Repository\BookRepositoryInterface;
-use BookStore\Business\Model\Author;
 
 class AuthorService implements AuthorServiceInterface
 {
@@ -73,7 +73,7 @@ class AuthorService implements AuthorServiceInterface
     /**
      * Checks whether firstName and lastName are correct and changes errors array accordingly
      *
-     * @param Author $author
+     * @param \BookStore\Business\Model\Author\Author $author
      * @param $errors
      *
      * @return bool

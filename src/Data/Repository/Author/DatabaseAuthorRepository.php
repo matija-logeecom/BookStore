@@ -1,11 +1,10 @@
 <?php
 
-namespace BookStore\Data\Repository;
+namespace BookStore\Data\Repository\Author;
 
-use BookStore\Business\Model\Author;
+use BookStore\Business\Model\Author\Author;
 use BookStore\Business\Repository\AuthorRepositoryInterface;
 use BookStore\Infrastructure\Database\DatabaseConnection;
-use BookStore\Business\Repository\BookRepositoryInterface;
 
 class DatabaseAuthorRepository implements AuthorRepositoryInterface
 {

@@ -1,11 +1,10 @@
 <?php
 
-namespace BookStore\Data\Repository;
+namespace BookStore\Data\Repository\Book;
 
-use BookStore\Business\Model\Book;
+use BookStore\Business\Model\Book\Book;
 use BookStore\Business\Repository\BookRepositoryInterface;
 use BookStore\Infrastructure\Session\SessionManager;
-use MongoDB\Driver\Session;
 
 class SessionBookRepository implements BookRepositoryInterface
 {

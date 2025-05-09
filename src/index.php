@@ -1,12 +1,8 @@
 <?php
 
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
-
 require_once __DIR__ . "/../vendor/autoload.php";
 
-use BookStore\DI\Bootstrap;
+use BookStore\Bootstrap;
 use BookStore\DI\ServiceRegistry;
 use BookStore\Presentation\Controller\AuthorController;
 use BookStore\Presentation\Controller\BookController;
@@ -67,11 +63,15 @@ try {
     elseif ($requestMethod === 'POST' && $routePath === '/api/books/create') {
         $bookController->createBook()->view();
     } // POST /api/books/{id}/edit
-    elseif ($requestMethod === 'POST' && preg_match('/^\/api\/books\/(\d+)\/edit$/', $routePath, $matches)) {
+    elseif ($requestMethod === 'POST' && preg_match(
+            '/^\/api\/books\/(\d+)\/edit$/', $routePath, $matches)
+    ) {
         $bookId = (int)$matches[1];
         $bookController->editBook($bookId)->view();
     } // POST /api/books/{id}/delete
-    elseif ($requestMethod === 'POST' && preg_match('/^\/api\/books\/(\d+)\/delete$/', $routePath, $matches)) {
+    elseif ($requestMethod === 'POST' && preg_match(
+            '/^\/api\/books\/(\d+)\/delete$/', $routePath, $matches)
+    ) {
         $bookId = (int)$matches[1];
         $bookController->deleteBook($bookId)->view();
     } else {

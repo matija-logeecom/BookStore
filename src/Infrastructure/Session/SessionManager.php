@@ -30,7 +30,6 @@ class SessionManager
      * Gets a value from the session.
      *
      * @param string $key The key of the item to retrieve.
-     * @param mixed $default The default value to return if the key is not found (optional).
      *
      * @return mixed The value from the session, or the default value.
      */

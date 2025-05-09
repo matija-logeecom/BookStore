@@ -1,22 +1,22 @@
 <?php
 
-namespace BookStore\Business\Service;
+namespace BookStore\Business\Service\Author;
 
-use BookStore\Business\Model\Author;
+use BookStore\Business\Model\Author\Author;
 
 interface AuthorServiceInterface
 {
     /**
      * Retrieves a list of all authors in current session
      *
-     * @return Author[]
+     * @return \BookStore\Business\Model\Author\Author[]
      */
     public function getAuthorList(): array;
 
     /**
      * Adds an author with provided name to current session
      *
-     * @param Author $author
+     * @param \BookStore\Business\Model\Author\Author $author
      * @param array $errors
      *
      * @return void
@@ -47,7 +47,7 @@ interface AuthorServiceInterface
      *
      * @param int $id
      *
-     * @return Author|null
+     * @return \BookStore\Business\Model\Author\Author|null
      */
     public function getAuthorById(int $id): ?Author;
 }

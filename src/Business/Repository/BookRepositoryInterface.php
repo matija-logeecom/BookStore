@@ -2,7 +2,7 @@
 
 namespace BookStore\Business\Repository;
 
-use BookStore\Business\Model\Book;
+use BookStore\Business\Model\Book\Book;
 
 /**
  * Defines the contract for managing book data.
@@ -23,14 +23,14 @@ interface BookRepositoryInterface
      *
      * @param int $bookId The ID of the book.
      *
-     * @return Book|null The book data as an associative array, or null if not found.
+     * @return \BookStore\Business\Model\Book\Book|null The book data as an associative array, or null if not found.
      */
     public function findBookById(int $bookId): ?Book;
 
     /**
      * Adds a new book.
      *
-     * @param Book $book
+     * @param \BookStore\Business\Model\Book\Book $book
      *
      * @return Book|null The newly created book data as an associative array (including its new ID), or null on failure.
      */
@@ -39,7 +39,7 @@ interface BookRepositoryInterface
     /**
      * Updates an existing book.
      *
-     * @param Book $book
+     * @param \BookStore\Business\Model\Book\Book $book
      *
      * @return Book|null The updated book data as an associative array, or null on failure or if not found.
      */

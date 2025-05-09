@@ -1,11 +1,10 @@
 <?php
 
-namespace BookStore\Data\Repository;
+namespace BookStore\Data\Repository\Book;
 
+use BookStore\Business\Model\Book\Book;
 use BookStore\Business\Repository\BookRepositoryInterface;
 use BookStore\Infrastructure\Database\DatabaseConnection;
-use BookStore\Business\Model\Book;
-use PDO;
 use PDOException;
 
 class DatabaseBookRepository implements BookRepositoryInterface
@@ -15,7 +14,13 @@ class DatabaseBookRepository implements BookRepositoryInterface
      */
     public function getBooksByAuthorId(int $authorId): array
     {
-        $query = "SELECT id, title, year, author_id FROM Books WHERE author_id = :author_id ORDER BY year DESC, title ASC";
+        $query = "
+            SELECT
+                id, title, year, author_id
+            FROM 
+                Books
+            WHERE 
+                author_id = :author_id ORDER BY year DESC, title ASC";
         $statement = DatabaseConnection::getInstance()->getConnection()->prepare($query);
         $statement->execute(['author_id' => $authorId]);
         $rows = $statement->fetchAll();

@@ -1,9 +1,9 @@
 <?php
 
-namespace BookStore\Business\Service;
+namespace BookStore\Business\Service\Book;
 
-use BookStore\Business\Model\Author;
-use BookStore\Business\Model\Book;
+use BookStore\Business\Model\Author\Author;
+use BookStore\Business\Model\Book\Book;
 
 interface BookServiceInterface
 {
