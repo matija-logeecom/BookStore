@@ -2,7 +2,9 @@
 
 namespace BookStore\Business\Service;
 
+use BookStore\Business\Model\Author;
 use BookStore\Business\Repository\BookRepositoryInterface;
+use BookStore\Business\Model\Book;
 
 class BookService implements BookServiceInterface
 {
@@ -14,75 +16,47 @@ class BookService implements BookServiceInterface
     }
 
     /**
-     * Retrieves a list of books for a given author.
-     *
-     * @param int $authorId
-     *
-     * @return array
+     * @inheritDoc
      */
-    public function getBooksByAuthor(int $authorId): array
+    public function getBooksByAuthor(Author $author): array
     {
-        return $this->bookRepository->getBooksByAuthorId($authorId);
+        return $this->bookRepository->getBooksByAuthorId($author->getId());
     }
 
     /**
-     * Retrieves a single book by its ID.
-     *
-     * @param int $bookId
-     *
-     * @return array|null
+     * @inheritDoc
      */
-    public function getBookById(int $bookId): ?array
+    public function getBookById(int $bookId): ?Book
     {
         return $this->bookRepository->findBookById($bookId);
     }
 
     /**
-     * Adds a new book after validation.
-     *
-     * @param string $title
-     * @param string $yearInput The year as a string from user input.
-     * @param int $authorId
-     * @param array &$errors Passed by reference to populate with validation errors.
-     *
-     * @return array|null The new book data if successful, null otherwise.
+     * @inheritDoc
      */
-    public function addBook(string $title, string $yearInput, int $authorId, array &$errors): ?array
+    public function addBook(Book $book, array &$errors): ?Book
     {
-        if (!$this->validateBook($title, $yearInput, $authorId, $errors)) {
+        if (!$this->validateBook($book, $errors)) {
             return null;
         }
 
-        $year = (int)$yearInput;
-        return $this->bookRepository->addBook(trim($title), $year, $authorId);
+        return $this->bookRepository->addBook($book);
     }
 
     /**
-     * Edits an existing book after validation.
-     *
-     * @param int $bookId
-     * @param string $title
-     * @param string $yearInput The year as a string from user input.
-     * @param array &$errors Passed by reference to populate with validation errors.
-     *
-     * @return array|null The updated book data if successful, null otherwise.
+     * @inheritDoc
      */
-    public function editBook(int $bookId, string $title, string $yearInput, array &$errors): ?array
+    public function editBook(Book $book, array &$errors): ?Book
     {
-        if (!$this->validateBook($title, $yearInput, null, $errors)) {
+        if (!$this->validateBook($book, $errors)) {
             return null;
         }
 
-        $year = (int)$yearInput;
-        return $this->bookRepository->updateBook($bookId, trim($title), $year);
+        return $this->bookRepository->updateBook($book);
     }
 
     /**
-     * Deletes a book.
-     *
-     * @param int $bookId
-     *
-     * @return bool True on success, false otherwise.
+     * @inheritDoc
      */
     public function deleteBook(int $bookId): bool
     {
@@ -90,17 +64,14 @@ class BookService implements BookServiceInterface
     }
 
     /**
-     * Validates book data.
-     *
-     * @param string $title
-     * @param string $yearInput
-     * @param int|null $authorId For new books; null if not validating author_id (e.g., during edit).
+     * @param Book $book
      * @param array &$errors
      *
      * @return bool True if valid, false otherwise.
      */
-    private function validateBook(string $title, string $yearInput, ?int $authorId, array &$errors): bool
+    private function validateBook(Book $book, array &$errors): bool
     {
+        $title = trim($book->getTitle());
         $title = trim($title);
         if (empty($title)) {
             $errors['title'] = "Title is required.";
@@ -108,7 +79,7 @@ class BookService implements BookServiceInterface
             $errors['title'] = "Title must be ≤ 255 characters.";
         }
 
-        $yearInput = trim($yearInput);
+        $yearInput = trim($book->getYear());
         if (empty($yearInput)) {
             $errors['year'] = "Year is required.";
         } elseif (!is_numeric($yearInput)) {
@@ -120,6 +91,7 @@ class BookService implements BookServiceInterface
             }
         }
 
+        $authorId = $book->getAuthorId();
         if ($authorId !== null) {
             if (empty($authorId)) {
                 $errors['author_id'] = "Author ID is required.";

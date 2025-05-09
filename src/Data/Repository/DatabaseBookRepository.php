@@ -4,57 +4,69 @@ namespace BookStore\Data\Repository;
 
 use BookStore\Business\Repository\BookRepositoryInterface;
 use BookStore\Infrastructure\Database\DatabaseConnection;
+use BookStore\Business\Model\Book;
 use PDO;
 use PDOException;
 
 class DatabaseBookRepository implements BookRepositoryInterface
 {
-    private PDO $connection;
-
-    public function __construct(PDO $pdo)
-    {
-        $this->connection = $pdo;
-    }
-
     /**
      * @inheritDoc
      */
     public function getBooksByAuthorId(int $authorId): array
     {
-        $query = "SELECT id, title, year FROM Books WHERE author_id = :author_id ORDER BY year DESC, title ASC";
-        $statement = $this->connection->prepare($query);
+        $query = "SELECT id, title, year, author_id FROM Books WHERE author_id = :author_id ORDER BY year DESC, title ASC";
+        $statement = DatabaseConnection::getInstance()->getConnection()->prepare($query);
         $statement->execute(['author_id' => $authorId]);
-        return $statement->fetchAll();
+        $rows = $statement->fetchAll();
+
+        $books = [];
+        foreach ($rows as $row) {
+            $books[] = new Book(
+                (int)$row['id'],
+                $row['title'],
+                (int)$row['year'],
+                (int)$row['author_id']
+            );
+        }
+
+        return $books;
     }
 
     /**
      * @inheritDoc
      */
-    public function findBookById(int $bookId): ?array
+    public function findBookById(int $bookId): ?Book
     {
         $query = "SELECT id, title, year, author_id FROM Books WHERE id = :id";
-        $statement = $this->connection->prepare($query);
+        $statement = DatabaseConnection::getInstance()->getConnection()->prepare($query);
         $statement->execute(['id' => $bookId]);
-        $book = $statement->fetch();
-        return $book ?: null;
+        $row = $statement->fetch();
+
+        return new Book(
+            (int)$row['id'],
+            $row['title'],
+            (int)$row['year'],
+            (int)$row['author_id']
+        );
     }
 
     /**
      * @inheritDoc
      */
-    public function addBook(string $title, int $year, int $authorId): ?array
+    public function addBook(Book $book): ?Book
     {
         $query = "INSERT INTO Books (title, year, author_id) VALUES (:title, :year, :author_id)";
         try {
-            $statement = $this->connection->prepare($query);
+            $statement = DatabaseConnection::getInstance()->getConnection()->prepare($query);
             $success = $statement->execute([
-                'title' => $title,
-                'year' => $year,
-                'author_id' => $authorId
+                'title' => $book->getTitle(),
+                'year' => $book->getYear(),
+                'author_id' => $book->getAuthorId()
             ]);
 
             if ($success) {
-                $newBookId = $this->connection->lastInsertId();
+                $newBookId = DatabaseConnection::getInstance()->getConnection()->lastInsertId();
                 return $this->findBookById((int)$newBookId);
             }
         } catch (PDOException $e) {
@@ -66,24 +78,24 @@ class DatabaseBookRepository implements BookRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function updateBook(int $bookId, string $title, int $year): ?array
+    public function updateBook(Book $book): ?Book
     {
-        $existingBook = $this->findBookById($bookId);
+        $existingBook = $this->findBookById($book->getId());
         if (!$existingBook) {
             return null;
         }
 
         $query = "UPDATE Books SET title = :title, year = :year WHERE id = :id";
         try {
-            $statement = $this->connection->prepare($query);
+            $statement = DatabaseConnection::getInstance()->getConnection()->prepare($query);
             $success = $statement->execute([
-                'title' => $title,
-                'year' => $year,
-                'id' => $bookId
+                'title' => $book->getTitle(),
+                'year' => $book->getYear(),
+                'id' => $book->getId()
             ]);
 
             if ($success) {
-                return $this->findBookById($bookId);
+                return $this->findBookById($book->getId());
             }
         } catch (PDOException $e) {
             return null;
@@ -98,7 +110,7 @@ class DatabaseBookRepository implements BookRepositoryInterface
     {
         $query = "DELETE FROM Books WHERE id = :id";
         try {
-            $statement = $this->connection->prepare($query);
+            $statement = DatabaseConnection::getInstance()->getConnection()->prepare($query);
             $statement->execute(['id' => $bookId]);
             return $statement->rowCount() > 0;
         } catch (PDOException $e) {

@@ -2,6 +2,7 @@
 
 namespace BookStore\Presentation\Controller;
 
+use BookStore\Business\Model\Author;
 use BookStore\Business\Service\AuthorService;
 use BookStore\Presentation\Response\HtmlResponse;
 use BookStore\Presentation\Response\Response;
@@ -18,13 +19,12 @@ class AuthorController
     /**
      * Shows all authors on page
      *
-     * @return \BookStore\Presentation\Response\Response
+     * @return Response
      */
     public function listAuthors(): Response
     {
         $authors = $this->authorService->getAuthorList();
 
-//        $path = __DIR__ . "/../../public/pages/authors.phtml";
         $path = VIEWS_PATH . "/authors.phtml";
         return new HtmlResponse($path, variables: ["authors" => $authors]);
     }
@@ -50,10 +50,10 @@ class AuthorController
             ]);
         }
 
-        $this->authorService->addAuthor($firstName, $lastName, $errors);
+        $author = new Author(0, trim($firstName . ' ' . $lastName));
+        $this->authorService->addAuthor($author, $errors);
 
         if (!empty($errors['firstName'] || !empty($errors['lastName']))) {
-//            $path = __DIR__ . "/../../public/pages/create_author.phtml";
             $path = VIEWS_PATH . "/create_author.phtml";
             return new HtmlResponse($path, variables: [
                 "errors" => $errors,
@@ -76,14 +76,13 @@ class AuthorController
     {
         $errors = ['firstName' => '', 'lastName' => ''];
         $author = $this->authorService->getAuthorById($id);
-        $firstName = explode(' ', $author['name'])[0] ?? '';
-        $lastName = explode(' ', $author['name'])[1] ?? '';
+        $firstName = $author->getFirstName() ?? '';
+        $lastName = $author->getLastName() ?? '';
         if (!$author) {
             return new HtmlResponse("", statusCode: 303, headers: ['Location' => 'index.php']);
         }
 
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-//            $path = __DIR__ . "/../../public/pages/edit_author.phtml";
             $path = VIEWS_PATH . "/edit_author.phtml";
             return new HtmlResponse($path, variables: [
                 'author' => $author,
@@ -95,10 +94,10 @@ class AuthorController
 
         $firstName = trim($_POST['first_name']) ?? '';
         $lastName = trim($_POST['last_name']) ?? '';
-        $this->authorService->editAuthor($id, $firstName, $lastName, $errors);
+        $editedAuthor = new Author($id, $firstName . ' ' . $lastName);
+        $this->authorService->editAuthor($editedAuthor, $errors);
 
         if (!empty($errors['firstName'] || !empty($errors['lastName']))) {
-//            $path = __DIR__ . "/../../public/pages/edit_author.phtml";
             $path = VIEWS_PATH . "/edit_author.phtml";
             return new HtmlResponse($path, variables: [
                 'author' => $author,
@@ -120,11 +119,10 @@ class AuthorController
      */
     public function deleteAuthor(int $id): Response
     {
-        $fullName = $this->authorService->getAuthorById($id)['name'] ?? '';
+        $fullName = $this->authorService->getAuthorById($id)->getName() ?? '';
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-//            $path = __DIR__ . "/../../public/pages/delete_author.phtml";
             $path = VIEWS_PATH . "/delete_author.phtml";
-            return new HtmlResponse($path, variables: ['fullName' => $fullName]);
+            return new HtmlResponse($path, variables: ['fullName' => $fullName, 'authorId' => $id]);
         }
 
         if ($_POST['action'] === 'delete') {

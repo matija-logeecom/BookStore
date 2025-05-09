@@ -4,6 +4,7 @@ namespace BookStore\Business\Service;
 
 use BookStore\Business\Repository\AuthorRepositoryInterface;
 use BookStore\Business\Repository\BookRepositoryInterface;
+use BookStore\Business\Model\Author;
 
 class AuthorService implements AuthorServiceInterface
 {
@@ -17,84 +18,54 @@ class AuthorService implements AuthorServiceInterface
     }
 
     /**
-     * Retrieves a list of all authors in current session
-     *
-     * @return array
+     * @inheritDoc
      */
     public function getAuthorList(): array
     {
-        $authors = array_map(fn($author) => $author + ['books' => 0], $this->authorRepository->getAll());
-        foreach ($authors as &$author) {
-           $author['books'] = $this->countBooks($author);
-        }
-
-        return $authors;
+        return $this->authorRepository->getAll();
     }
 
     /**
-     * Adds an author with provided name to current session
-     *
-     * @param $firstName
-     * @param $lastName
-     * @param array $errors
-     *
-     * @return void
+     * @inheritDoc
      */
-    public function addAuthor($firstName, $lastName, array &$errors): void
+    public function addAuthor(Author $author, array &$errors): void
     {
-        if (!$this->validateName($firstName, $lastName, $errors)) {
+        if (!$this->validateName($author, $errors)) {
             return;
         }
 
-        $fullName = $firstName . ' ' . $lastName;
-        $this->authorRepository->addAuthor($fullName);
+        $this->authorRepository->addAuthor($author);
     }
 
     /**
-     * Changes name of author with provided id to provided name
-     *
-     * @param $authorId
-     * @param $firstName
-     * @param $lastName
-     * @param $errors
-     *
-     * @return void
+     * @inheritDoc
      */
-    public function editAuthor($authorId, $firstName, $lastName, &$errors): void
+    public function editAuthor(Author $author, &$errors): void
     {
-        if (!$this->validateName($firstName, $lastName, $errors)) {
+        if (!$this->validateName($author, $errors)) {
             return;
         }
 
-        $fullName = $firstName . ' ' . $lastName;
-        $this->authorRepository->editAuthor($authorId, $fullName);
+        $this->authorRepository->editAuthor($author);
     }
 
     /**
-     * Deletes an author with provided id from current session
-     *
-     * @param int $authorId
-     *
-     * @return void
+     * @inheritDoc
      */
     public function deleteAuthor(int $authorId): void
     {
         $books = $this->bookRepository->getBooksByAuthorId($authorId);
         foreach ($books as $book) {
-            $this->bookRepository->deleteBook($book['id']);
+            $this->bookRepository->deleteBook($book->getId());
         }
 
         $this->authorRepository->deleteAuthor($authorId);
     }
 
     /**
-     * Returns an author with provided id
-     *
-     * @param $id
-     *
-     * @return array|null
+     * @inheritDoc
      */
-    public function getAuthorById($id): ?array
+    public function getAuthorById(int $id): ?Author
     {
         return $this->authorRepository->getAuthorById($id);
     }
@@ -102,14 +73,16 @@ class AuthorService implements AuthorServiceInterface
     /**
      * Checks whether firstName and lastName are correct and changes errors array accordingly
      *
-     * @param $firstName
-     * @param $lastName
+     * @param Author $author
      * @param $errors
      *
      * @return bool
      */
-    private function validateName($firstName, $lastName, &$errors): bool
+    private function validateName(Author $author, &$errors): bool
     {
+        $firstName = $author->getFirstName();
+        $lastName = $author->getLastName();
+
         if ($firstName === '') {
             $errors['firstName'] = "* This field is required";
         }
@@ -127,12 +100,5 @@ class AuthorService implements AuthorServiceInterface
         }
 
         return (empty($errors['firstName']) && empty($errors['lastName']));
-    }
-
-    private function countBooks(mixed $author): int
-    {
-        $books = $this->bookRepository->getBooksByAuthorId($author['id']);
-
-        return count($books);
     }
 }

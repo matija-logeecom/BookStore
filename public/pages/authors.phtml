@@ -23,20 +23,20 @@
                         <div class="user-image">
                             <img src="/images/user.png" alt="user">
                         </div>
-                        <a href="pages/booklist.html?author_id=<?= $author['id'] ?>">
-                            <b><?= htmlspecialchars($author['name']) ?></b>
+                        <a href="pages/booklist.html?author_id=<?= $author->getId() ?>">
+                            <b><?= htmlspecialchars($author->getName()) ?></b>
                         </a>
                     </div>
                 </td>
                 <td class="books-col">
-                    <div class="book-count"><?= $author['books'] ?></div>
+                    <div class="book-count"><?= $author->getBookCount() ?></div>
                 </td>
                 <td class="actions-col">
                     <div class="actions">
-                        <a class="button edit" href="/src/index.php?action=editAuthor&id=<?= $author['id'] ?>">
+                        <a class="button edit" href="/src/index.php?action=editAuthor&id=<?= $author->getId() ?>">
                             <img src="../images/pen.png" alt="pen">
                         </a>
-                        <a class="button delete" href="/src/index.php?action=deleteAuthor&id=<?= $author['id'] ?>">
+                        <a class="button delete" href="/src/index.php?action=deleteAuthor&id=<?= $author->getId() ?>">
                             <img src="../images/minus.png" alt="minus">
                         </a>
                     </div>

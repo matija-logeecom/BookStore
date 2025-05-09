@@ -2,6 +2,8 @@
 
 namespace BookStore\Business\Repository;
 
+use BookStore\Business\Model\Book;
+
 /**
  * Defines the contract for managing book data.
  */
@@ -21,31 +23,27 @@ interface BookRepositoryInterface
      *
      * @param int $bookId The ID of the book.
      *
-     * @return array|null The book data as an associative array, or null if not found.
+     * @return Book|null The book data as an associative array, or null if not found.
      */
-    public function findBookById(int $bookId): ?array;
+    public function findBookById(int $bookId): ?Book;
 
     /**
      * Adds a new book.
      *
-     * @param string $title The title of the book.
-     * @param int $year The publication year of the book.
-     * @param int $authorId The ID of the author of the book.
+     * @param Book $book
      *
-     * @return array|null The newly created book data as an associative array (including its new ID), or null on failure.
+     * @return Book|null The newly created book data as an associative array (including its new ID), or null on failure.
      */
-    public function addBook(string $title, int $year, int $authorId): ?array;
+    public function addBook(Book $book): ?Book;
 
     /**
      * Updates an existing book.
      *
-     * @param int $bookId The ID of the book to update.
-     * @param string $title The new title of the book.
-     * @param int $year The new publication year of the book.
+     * @param Book $book
      *
      * @return array|null The updated book data as an associative array, or null on failure or if not found.
      */
-    public function updateBook(int $bookId, string $title, int $year): ?array;
+    public function updateBook(Book $book): ?Book;
 
     /**
      * Deletes a book.

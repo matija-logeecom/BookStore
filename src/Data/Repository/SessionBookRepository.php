@@ -2,6 +2,7 @@
 
 namespace BookStore\Data\Repository;
 
+use BookStore\Business\Model\Book;
 use BookStore\Business\Repository\BookRepositoryInterface;
 
 class SessionBookRepository implements BookRepositoryInterface
@@ -33,17 +34,23 @@ class SessionBookRepository implements BookRepositoryInterface
             }
             return $b['year'] <=> $a['year'];
         });
-        return $authorBooks;
+
+        $bookModels = [];
+        foreach($authorBooks as $book) {
+            $bookModels[] = new Book($book['id'], $book['title'], $book['year'], $book['author_id']);
+        }
+
+        return $bookModels;
     }
 
     /**
      * @inheritDoc
      */
-    public function findBookById(int $bookId): ?array
+    public function findBookById(int $bookId): ?Book
     {
         foreach ($_SESSION['books'] as $book) {
             if ($book['id'] === $bookId) {
-                return $book;
+                return new Book($book['id'], $book['title'], $book['year'], $book['author_id']);
             }
         }
         return null;
@@ -52,33 +59,34 @@ class SessionBookRepository implements BookRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function addBook(string $title, int $year, int $authorId): ?array
+    public function addBook(Book $book): ?Book
     {
         $newBookId = $_SESSION['next_book_id']++;
         $newBook = [
             'id' => $newBookId,
-            'title' => $title,
-            'year' => $year,
-            'author_id' => $authorId
+            'title' => $book->getTitle(),
+            'year' => $book->getYear(),
+            'author_id' => $book->getAuthorId(),
         ];
         $_SESSION['books'][] = $newBook;
-        return $newBook;
+
+        return new Book($newBookId, $book->getTitle(), $book->getYear(), $book->getAuthorId());
     }
 
     /**
      * @inheritDoc
      */
-    public function updateBook(int $bookId, string $title, int $year): ?array
+    public function updateBook(Book $book): ?Book
     {
-        foreach ($_SESSION['books'] as $key => $book) {
-            if ($book['id'] === $bookId) {
-                $_SESSION['books'][$key]['title'] = $title;
-                $_SESSION['books'][$key]['year'] = $year;
-                // Note: author_id is not updated by this method as per current interface
-                return $_SESSION['books'][$key];
+        foreach ($_SESSION['books'] as $key => $value) {
+            if ($value['id'] === $book->getId()) {
+                $_SESSION['books'][$key]['title'] = $book->getTitle();
+                $_SESSION['books'][$key]['year'] = $book->getYear();
+
+                return new Book($book->getId(), $book->getTitle(), $book->getYear(), $book->getAuthorId());
             }
         }
-        return null; // Book not found
+        return null;
     }
 
     /**

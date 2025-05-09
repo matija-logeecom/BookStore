@@ -2,6 +2,7 @@
 
 namespace BookStore\Presentation\Controller;
 
+use BookStore\Business\Model\Book;
 use BookStore\Business\Service\AuthorService;
 use BookStore\Business\Service\BookService;
 use BookStore\Presentation\Response\JsonResponse;
@@ -26,7 +27,7 @@ class BookController
             return JsonResponse::createNotFound();
         }
 
-        $books = $this->bookService->getBooksByAuthor($authorId);
+        $books = $this->bookService->getBooksByAuthor($author);
 
         return new JsonResponse($books);
     }
@@ -40,7 +41,8 @@ class BookController
         $year = $data['year'] ?? '';
         $authorId = isset($data['author_id']) ? (int)$data['author_id'] : null;
 
-        $newBook = $this->bookService->addBook($title, (string)$year, $authorId, $errors);
+        $book = new Book(0, $title, $year, $authorId);
+        $newBook = $this->bookService->addBook($book, $errors);
 
         if (!$newBook) {
             return JsonResponse::createBadRequest();
@@ -57,7 +59,10 @@ class BookController
         $title = $data['title'] ?? '';
         $year = $data['year'] ?? '';
 
-        $updatedBook = $this->bookService->editBook($id, $title, (string)$year, $errors);
+        $existingBook = $this->bookService->getBookById($id);
+
+        $book = new Book($id, $title, $year, $existingBook->getAuthorId());
+        $updatedBook = $this->bookService->editBook($book, $errors);
 
         if (!empty($errors)) {
             return JsonResponse::createBadRequest();

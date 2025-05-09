@@ -2,48 +2,47 @@
 
 namespace BookStore\Business\Service;
 
+use BookStore\Business\Model\Author;
+use BookStore\Business\Model\Book;
+
 interface BookServiceInterface
 {
     /**
      * Retrieves a list of books for a given author.
      *
-     * @param int $authorId
+     * @param Author $author
      *
      * @return array
      */
-    public function getBooksByAuthor(int $authorId): array;
+    public function getBooksByAuthor(Author $author): array;
     /**
      * Retrieves a single book by its ID.
      *
      * @param int $bookId
      *
-     * @return array|null
+     * @return Book|null
      */
-    public function getBookById(int $bookId): ?array;
+    public function getBookById(int $bookId): ?Book;
 
     /**
      * Adds a new book after validation.
      *
-     * @param string $title
-     * @param string $yearInput The year as a string from user input.
-     * @param int $authorId
+     * @param Book $book
      * @param array &$errors Passed by reference to populate with validation errors.
      *
-     * @return array|null The new book data if successful, null otherwise.
+     * @return Book|null The new book data if successful, null otherwise.
      */
-    public function addBook(string $title, string $yearInput, int $authorId, array &$errors): ?array;
+    public function addBook(Book $book, array &$errors): ?Book;
 
     /**
      * Edits an existing book after validation.
      *
-     * @param int $bookId
-     * @param string $title
-     * @param string $yearInput The year as a string from user input.
+     * @param Book $book
      * @param array &$errors Passed by reference to populate with validation errors.
      *
-     * @return array|null The updated book data if successful, null otherwise.
+     * @return Book|null The updated book data if successful, null otherwise.
      */
-    public function editBook(int $bookId, string $title, string $yearInput, array &$errors): ?array;
+    public function editBook(Book $book, array &$errors): ?Book;
 
     /**
      * Deletes a book.

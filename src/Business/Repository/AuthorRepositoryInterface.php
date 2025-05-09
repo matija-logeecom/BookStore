@@ -2,6 +2,8 @@
 
 namespace BookStore\Business\Repository;
 
+use BookStore\Business\Model\Author;
+
 /**
  * Defines the contract for managing author data
  * Implementations can store data in sessions or MySQL database
@@ -18,21 +20,20 @@ interface AuthorRepositoryInterface
     /**
      * Adds a new author with the provided name
      *
-     * @param string $fullName
+     * @param Author $author
      *
      * @return void
      */
-    public function addAuthor(string $fullName): void;
+    public function addAuthor(Author $author): void;
 
     /**
      * Changes the name of the author with the provided ID
      *
-     * @param int $authorId
-     * @param string $fullName
+     * @param Author $author
      *
      * @return void
      */
-    public function editAuthor(int $authorId, string $fullName): void;
+    public function editAuthor(Author $author): void;
 
     /**
      * Deletes author with the provided ID
@@ -48,7 +49,7 @@ interface AuthorRepositoryInterface
      *
      * @param int $authorId
      *
-     * @return array|null
+     * @return Author|null
      */
-    public function getAuthorById(int $authorId): ?array;
+    public function getAuthorById(int $authorId): ?Author;
 }

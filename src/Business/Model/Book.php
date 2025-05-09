@@ -2,7 +2,8 @@
 
 namespace BookStore\Business\Model;
 
-class Book
+use JsonSerializable;
+class Book implements JsonSerializable
 {
     private int $id;
     private string $title;
@@ -44,6 +45,16 @@ class Book
             'title' => $this->title,
             'year' => $this->year,
             'authorId' => $this->authorId
+        ];
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'year' => $this->year,
+            'authorId' => $this->authorId,
         ];
     }
 }

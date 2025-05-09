@@ -11,11 +11,10 @@ use BookStore\Business\Service\BookServiceInterface;
 use BookStore\Data\Repository\DatabaseAuthorRepository;
 use BookStore\Data\Repository\DatabaseBookRepository;
 use BookStore\Data\Repository\SessionBookRepository;
-use BookStore\Infrastructure\Database\DatabaseConnection;
+use BookStore\Data\Repository\SessionAuthorRepository;
 use BookStore\Presentation\Controller\AuthorController;
 use BookStore\Presentation\Controller\BookController;
 use Exception;
-use PDO;
 
 class Bootstrap
 {
@@ -26,20 +25,19 @@ class Bootstrap
      */
     public static function init(): void
     {
-        $pdo = DatabaseConnection::getInstance()->getConnection();
-        self::registerRepositories($pdo);
+        self::registerRepositories();
         self::registerServices();
         self::registerControllers();
     }
 
-    private static function registerRepositories(PDO $pdo): void
+    private static function registerRepositories(): void
     {
         ServiceRegistry::set(BookRepositoryInterface::class,
-            new SessionBookRepository()
+            new DatabaseBookRepository()
         );
 
         ServiceRegistry::set(AuthorRepositoryInterface::class,
-            new DatabaseAuthorRepository($pdo)
+            new DatabaseAuthorRepository()
         );
     }
 
@@ -48,13 +46,17 @@ class Bootstrap
      */
     private static function registerServices(): void
     {
-        ServiceRegistry::set(BookServiceInterface::class,
-            new BookService(ServiceRegistry::get(BookRepositoryInterface::class))
+        ServiceRegistry::set(
+            BookServiceInterface::class,
+            new BookService(ServiceRegistry::get(BookRepositoryInterface::class)
+            )
         );
 
         ServiceRegistry::set(AuthorServiceInterface::class,
-            new AuthorService(ServiceRegistry::get(AuthorRepositoryInterface::class),
-                ServiceRegistry::get(BookRepositoryInterface::class))
+            new AuthorService(
+                ServiceRegistry::get(AuthorRepositoryInterface::class),
+                ServiceRegistry::get(BookRepositoryInterface::class)
+            )
         );
     }
 
