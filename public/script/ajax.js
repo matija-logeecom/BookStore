@@ -57,32 +57,6 @@ export async function deleteData(url) {
     }
 }
 
-async function fetchData(url) {
-    try {
-        const response = await fetch(url)
-        if (!response.ok) throw new Error("Error fetching data.")
-        return await response.json()
-    } catch (err) {
-        console.error(err)
-        throw err
-    }
-}
-
-// export async function sendData(url, method = "POST", data = {}) {
-//     try {
-//         const response = await fetch(url, {
-//             method,
-//             headers: {'Content-Type': 'application/json'},
-//             body: JSON.stringify(data)
-//         })
-//         if (!response.ok) throw new Error("Error sending data.")
-//         return await response.json()
-//     } catch (err) {
-//         console.error(err)
-//         throw err
-//     }
-// }
-
 export async function fetchAuthorBooks(authorId) {
     return getData(`/api/books?authorId=${authorId}`);
 }

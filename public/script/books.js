@@ -55,7 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
             container.removeChild(container.firstChild)
         }
 
-
         if (books.length === 0) {
             container.textContent = 'No books found for this author.'
 
