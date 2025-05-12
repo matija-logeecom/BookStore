@@ -8,10 +8,19 @@ use BookStore\Infrastructure\Response\HtmlResponse;
 use BookStore\Infrastructure\Response\RedirectionResponse;
 use BookStore\Infrastructure\Response\Response;
 
+/*
+ * Class for handling HTTP requests
+ */
+
 class AuthorController
 {
     private AuthorService $authorService;
 
+    /**
+     * Constructor for Author Service
+     *
+     * @param AuthorService $authorService
+     */
     public function __construct(AuthorService $authorService)
     {
         $this->authorService = $authorService;
@@ -31,7 +40,7 @@ class AuthorController
     }
 
     /**
-     * Adds an author to current session
+     * Handles GET creation requests
      *
      * @param array $errors
      * @return Response
@@ -46,6 +55,15 @@ class AuthorController
             'lastName' => '',
         ]);
     }
+
+    /**
+     *  Handles POST creation requests
+     *
+     * @param string|null $firstName
+     * @param string|null $lastName
+     *
+     * @return Response
+     */
     public function createAuthor(string $firstName = null, string $lastName = null): Response
     {
         $errors = ['firstName' => '', 'lastName' => ''];
@@ -63,6 +81,14 @@ class AuthorController
         return new RedirectionResponse('index.php');
     }
 
+    /**
+     * Handles GET editing requests
+     *
+     * @param int $id
+     * @param array $errors
+     *
+     * @return Response
+     */
     public function editAuthorPage(int $id, array $errors): Response
     {
         $author = $this->authorService->getAuthorById($id);
@@ -83,7 +109,7 @@ class AuthorController
     }
 
     /**
-     * Changes author name with provided id in current session
+     * Handles POST editing requests
      *
      * @param int $id
      * @param string|null $firstName
@@ -112,6 +138,13 @@ class AuthorController
         return new RedirectionResponse('index.php', 303);
     }
 
+    /**
+     * Handles GET deletion requests
+     *
+     * @param int $id
+     *
+     * @return Response
+     */
     public function deleteAuthorPage(int $id): Response
     {
         $author = $this->authorService->getAuthorById($id);
@@ -126,7 +159,7 @@ class AuthorController
     }
 
     /**
-     * Deletes an author with provided id from current session
+     * Handles POST deletion requests
      *
      * @param int $id
      * @param string $action
@@ -142,5 +175,6 @@ class AuthorController
             }
         }
 
-        return new RedirectionResponse('index.php', 303);    }
+        return new RedirectionResponse('index.php', 303);
+    }
 }

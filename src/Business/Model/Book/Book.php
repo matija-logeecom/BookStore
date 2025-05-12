@@ -4,6 +4,10 @@ namespace BookStore\Business\Model\Book;
 
 use JsonSerializable;
 
+/*
+ * Book Model
+ */
+
 class Book implements JsonSerializable
 {
     private int $id;
@@ -11,6 +15,14 @@ class Book implements JsonSerializable
     private int $year;
     private int $authorId;
 
+    /**
+     * Constructs Book instance
+     *
+     * @param int $id
+     * @param string $title
+     * @param int $year
+     * @param int $authorId
+     */
     public function __construct(int $id, string $title, int $year, int $authorId)
     {
         $this->id = $id;

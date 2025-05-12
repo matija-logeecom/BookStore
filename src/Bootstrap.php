@@ -17,9 +17,15 @@ use BookStore\Presentation\Controller\AuthorController;
 use BookStore\Presentation\Controller\BookController;
 use Exception;
 
+/*
+ * Class for initializing services
+ */
+
 class Bootstrap
 {
     /**
+     * Initializes services
+     *
      * @return void
      *
      * @throws Exception
@@ -39,11 +45,11 @@ class Bootstrap
     private static function registerRepositories(): void
     {
         ServiceRegistry::set(BookRepositoryInterface::class,
-            new SessionBookRepository()
+            new DatabaseBookRepository()
         );
 
         ServiceRegistry::set(AuthorRepositoryInterface::class,
-            new SessionAuthorRepository()
+            new DatabaseAuthorRepository()
         );
     }
 

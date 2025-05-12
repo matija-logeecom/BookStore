@@ -7,15 +7,29 @@ use BookStore\Business\Model\Book\Book;
 use BookStore\Business\Service\Book\BookService;
 use BookStore\Infrastructure\Response\JsonResponse;
 
+/*
+ * Class for handling HTTP requests
+ */
+
 class BookController
 {
     private BookService $bookService;
 
+    /*
+     * Constructs Book Controller
+     */
     public function __construct(BookService $bookService)
     {
         $this->bookService = $bookService;
     }
 
+    /**
+     * Creates response with data about books written by author with provided id
+     *
+     * @param int $authorId
+     *
+     * @return JsonResponse
+     */
     public function getBooksByAuthor(int $authorId): JsonResponse
     {
         $author = new Author($authorId, '');
@@ -28,6 +42,11 @@ class BookController
         return new JsonResponse($books);
     }
 
+    /**
+     * Handles book creating requests
+     *
+     * @return JsonResponse
+     */
     public function createBook(): JsonResponse
     {
         $data = json_decode(file_get_contents('php://input'), true);
@@ -47,6 +66,13 @@ class BookController
         return new JsonResponse(['success' => true, 'book' => $newBook], 201);
     }
 
+    /**
+     * Handles book editing requests
+     *
+     * @param int $id
+     *
+     * @return JsonResponse
+     */
     public function editBook(int $id): JsonResponse
     {
         $data = json_decode(file_get_contents('php://input'), true);
@@ -71,6 +97,13 @@ class BookController
         return JsonResponse::createInternalServerError();
     }
 
+    /**
+     * Handles book deleting requests
+     *
+     * @param int $id
+     *
+     * @return JsonResponse
+     */
     public function deleteBook(int $id): JsonResponse
     {
         $success = $this->bookService->deleteBook($id);

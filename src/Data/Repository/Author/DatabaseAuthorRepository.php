@@ -7,6 +7,10 @@ use BookStore\Business\Repository\AuthorRepositoryInterface;
 use BookStore\Infrastructure\Database\DatabaseConnection;
 use PDOException;
 
+/*
+ * Class containing logic for working with Author database
+ */
+
 class DatabaseAuthorRepository implements AuthorRepositoryInterface
 {
     /**
@@ -50,6 +54,7 @@ class DatabaseAuthorRepository implements AuthorRepositoryInterface
             return $statement->execute(['name' => $author->getName()]);
         } catch (PDOException $e) {
             error_log($e->getMessage());
+
             return false;
         }
     }
@@ -65,6 +70,7 @@ class DatabaseAuthorRepository implements AuthorRepositoryInterface
             return $statement->execute(['name' => $author->getName(), 'id' => $author->getId()]);
         } catch (PDOException $e) {
             error_log($e->getMessage());
+
             return false;
         }
 
@@ -81,6 +87,7 @@ class DatabaseAuthorRepository implements AuthorRepositoryInterface
             return $statement->execute(['id' => $authorId]);
         } catch (PDOException $e) {
             error_log($e->getMessage());
+
             return false;
         }
     }

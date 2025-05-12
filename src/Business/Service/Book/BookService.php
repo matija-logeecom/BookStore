@@ -6,10 +6,19 @@ use BookStore\Business\Model\Author\Author;
 use BookStore\Business\Model\Book\Book;
 use BookStore\Business\Repository\BookRepositoryInterface;
 
+/*
+ * Class for handling service logic for books
+ */
+
 class BookService implements BookServiceInterface
 {
     private BookRepositoryInterface $bookRepository;
 
+    /**
+     * Constructs Book Service instance
+     *
+     * @param BookRepositoryInterface $bookRepository
+     */
     public function __construct(BookRepositoryInterface $bookRepository)
     {
         $this->bookRepository = $bookRepository;
@@ -64,6 +73,8 @@ class BookService implements BookServiceInterface
     }
 
     /**
+     * Checks if the book parameters are valid
+     *
      * @param Book $book
      * @param array &$errors
      *

@@ -6,11 +6,21 @@ use BookStore\Business\Model\Author\Author;
 use BookStore\Business\Repository\AuthorRepositoryInterface;
 use BookStore\Business\Repository\BookRepositoryInterface;
 
+/*
+ * Class for handling service logic for Authors
+ */
+
 class AuthorService implements AuthorServiceInterface
 {
     private AuthorRepositoryInterface $authorRepository;
     private BookRepositoryInterface $bookRepository;
 
+    /**
+     * Constructs Author Service instance
+     *
+     * @param AuthorRepositoryInterface $authorRepository
+     * @param BookRepositoryInterface $bookRepository
+     */
     public function __construct(AuthorRepositoryInterface $authorRepository, BookRepositoryInterface $bookRepository)
     {
         $this->authorRepository = $authorRepository;
@@ -30,7 +40,7 @@ class AuthorService implements AuthorServiceInterface
      */
     public function addAuthor(Author $author, array &$errors): bool
     {
-        if (!$this->validateName($author, $errors)) {
+        if (!$this->isAuthorValid($author, $errors)) {
             return false;
         }
 
@@ -42,11 +52,11 @@ class AuthorService implements AuthorServiceInterface
      */
     public function editAuthor(Author $author, &$errors): bool
     {
-        if (!$this->validateName($author, $errors) || !$this->validateExistence($author->getId())) {
+        if (!$this->isAuthorValid($author, $errors) || !$this->isAuthorPresent($author->getId())) {
             return false;
         }
 
-       return $this->authorRepository->editAuthor($author);
+        return $this->authorRepository->editAuthor($author);
     }
 
     /**
@@ -55,7 +65,7 @@ class AuthorService implements AuthorServiceInterface
     public function deleteAuthor(int $authorId): bool
     {
         $books = $this->bookRepository->getBooksByAuthorId($authorId);
-        if (!$this->validateExistence($authorId)) {
+        if (!$this->isAuthorPresent($authorId)) {
             return false;
         }
         foreach ($books as $book) {
@@ -84,7 +94,7 @@ class AuthorService implements AuthorServiceInterface
      *
      * @return bool
      */
-    private function validateName(Author $author, &$errors): bool
+    private function isAuthorValid(Author $author, &$errors): bool
     {
         $firstName = $author->getFirstName();
         $lastName = $author->getLastName();
@@ -108,7 +118,14 @@ class AuthorService implements AuthorServiceInterface
         return (empty($errors['firstName']) && empty($errors['lastName']));
     }
 
-    private function validateExistence(int $authorId): bool
+    /**
+     * Checks if author with provided id exists
+     *
+     * @param int $authorId
+     *
+     * @return bool
+     */
+    private function isAuthorPresent(int $authorId): bool
     {
         $authorRetrieved = $this->authorRepository->getAuthorById($authorId);
         return (bool)$authorRetrieved;

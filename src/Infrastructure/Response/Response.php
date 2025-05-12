@@ -8,6 +8,13 @@ abstract class Response
     protected array $headers = [];
     protected int $statusCode = 200;
 
+    /**
+     * Constructs Response instance
+     *
+     * @param mixed $body
+     * @param int $statusCode
+     * @param array $headers
+     */
     public function __construct(mixed $body, int $statusCode = 200, array $headers = [])
     {
         $this->body = $body;
@@ -29,6 +36,7 @@ abstract class Response
      * Setter for body
      *
      * @param mixed $body
+     *
      * @return void
      */
     public function setBody(mixed $body): void
@@ -91,6 +99,7 @@ abstract class Response
      * Creates not found response
      *
      * @param string $message
+     *
      * @return self
      */
     abstract static public function createNotFound(string $message = "Page not found."): self;
@@ -99,6 +108,7 @@ abstract class Response
      * Creates bad request response
      *
      * @param string $message
+     *
      * @return self
      */
     abstract static public function createBadRequest(string $message = "Bad Request."): self;
@@ -107,6 +117,7 @@ abstract class Response
      * Creates internal server error response
      *
      * @param string $message
+     *
      * @return self
      */
     abstract static public function createInternalServerError(string $message =

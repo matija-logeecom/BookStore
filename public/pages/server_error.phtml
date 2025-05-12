@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo htmlspecialchars($errorTitle ?? 'Error'); ?></title>
-    <link rel="stylesheet" href="../style/error.css"> </head>
+    <link rel="stylesheet" href="../style/error.css">
+</head>
 <body>
 <div class="error-container">
     <h1><?php echo htmlspecialchars($errorHeadline ?? 'An Error Occurred'); ?></h1>
@@ -15,7 +16,7 @@
         <?php if (isset($showGoBackLink) && $showGoBackLink): ?>
             <a href="javascript:history.back()" class="back-link">Go Back</a>
         <?php endif; ?>
-        <a href="/index.php" class="home-link">Homepage</a> </div>
+        <a href="/index.php" class="home-link">Homepage</a></div>
 </div>
 </body>
 </html>

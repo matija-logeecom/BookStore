@@ -1,4 +1,4 @@
-import {fetchAuthorBooks, sendData, getQueryParameter} from './ajax.js'
+import {fetchAuthorBooks, getData, postData, deleteData, putData, getQueryParameter} from './ajax.js'
 
 document.addEventListener('DOMContentLoaded', () => {
     const appContainer = document.getElementById('app-container')
@@ -198,7 +198,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 year: yearInput.value
             }
 
-            sendData(`/api/books/${book.id}/edit`, 'POST', updatedBook)
+            postData(`/api/books/${book.id}/edit`, updatedBook)
                 .then(() => {
                     document.body.classList.remove('overlay-active')
                     formWrapper.remove()
@@ -282,7 +282,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 year: yearInput.value
             }
 
-            sendData(`/api/books/create`, 'POST', newBook)
+            postData(`/api/books/create`, newBook)
                 .then(() => {
                     document.body.classList.remove('overlay-active')
                     formWrapper.remove()
@@ -361,7 +361,7 @@ document.addEventListener('DOMContentLoaded', () => {
         form.onsubmit = (e) => {
             e.preventDefault()
 
-            sendData(`/api/books/${book.id}/delete`, 'POST')
+            postData(`/api/books/${book.id}/delete`)
                 .then(() => {
                     document.body.classList.remove('overlay-active')
                     dialog.remove()

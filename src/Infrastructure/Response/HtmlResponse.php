@@ -2,12 +2,24 @@
 
 namespace BookStore\Infrastructure\Response;
 
+/*
+ * Class for handling HTML response logic
+ */
+
 class HtmlResponse extends Response
 {
     private array $variables;
 
     private string $path;
 
+    /**
+     * Constructs HTML response instance
+     *
+     * @param string $html
+     * @param array $variables
+     * @param int $statusCode
+     * @param array $headers
+     */
     public function __construct(string $html, array $variables = [], int $statusCode = 200, array $headers = [])
     {
         parent::__construct($html, $statusCode, $headers);

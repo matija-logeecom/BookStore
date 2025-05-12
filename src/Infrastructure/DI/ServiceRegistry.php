@@ -4,6 +4,10 @@ namespace BookStore\Infrastructure\DI;
 
 use Exception;
 
+/*
+ * Class for storing and retrieving services
+ */
+
 class ServiceRegistry
 {
     private static array $services = [];
@@ -12,7 +16,6 @@ class ServiceRegistry
      * Adds service to services array
      *
      * @param string $name
-     *
      * @param $service
      *
      * @return void

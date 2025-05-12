@@ -2,12 +2,23 @@
 
 namespace BookStore\Business\Model\Author;
 
+/*
+ * Author Model
+ */
+
 class Author
 {
     private int $id;
     private string $name;
     private int $bookCount = 0;
 
+    /**
+     * Constructs Author instance
+     *
+     * @param int $id
+     * @param string $name
+     * @param int $bookCount
+     */
     public function __construct(int $id, string $name, int $bookCount = 0)
     {
         $this->id = $id;

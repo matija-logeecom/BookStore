@@ -11,6 +11,11 @@ class DatabaseConnection
     private PDO $connection;
     private static ?DatabaseConnection $instance = null;
 
+    /**
+     * Constructs Database Connection instance
+     *
+     * @throws Exception
+     */
     private function __construct()
     {
         $dsn = 'mysql:host=localhost;dbname=BookStore';

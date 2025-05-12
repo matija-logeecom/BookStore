@@ -4,10 +4,21 @@ namespace BookStore\Infrastructure\Response;
 
 use BookStore\Infrastructure\Response\Response;
 
+/*
+ * Class for handling redirect logic
+ */
+
 class RedirectionResponse extends Response
 {
     private string $url;
 
+    /**
+     * Constructs Redirection Response instance
+     *
+     * @param string $url
+     * @param int $statusCode
+     * @param array $headers
+     */
     public function __construct(string $url, int $statusCode = 303, array $headers = [])
     {
         $finalHeaders = array_merge(['Location' => $url], $headers);
@@ -15,17 +26,14 @@ class RedirectionResponse extends Response
         $this->url = $url;
     }
 
+    /**
+     * URL getter
+     *
+     * @return string
+     */
     public function getUrl(): string
     {
         return $this->url;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function view(): void
-    {
-        parent::view();
     }
 
     /**

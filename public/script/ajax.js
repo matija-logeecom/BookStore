@@ -3,6 +3,60 @@ export function getQueryParameter(name) {
     return urlParams.get(name)
 }
 
+export async function getData(url) {
+    try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Error fetching data.");
+        return await response.json();
+    } catch (err) {
+        console.error(err);
+        throw err;
+    }
+}
+
+export async function postData(url, data = {}) {
+    try {
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        });
+        if (!response.ok) throw new Error("Error sending data.");
+        return await response.json();
+    } catch (err) {
+        console.error(err);
+        throw err;
+    }
+}
+
+export async function putData(url, data = {}) {
+    try {
+        const response = await fetch(url, {
+            method: "PUT",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        });
+        if (!response.ok) throw new Error("Error updating data.");
+        return await response.json();
+    } catch (err) {
+        console.error(err);
+        throw err;
+    }
+}
+
+export async function deleteData(url) {
+    try {
+        const response = await fetch(url, {
+            method: "DELETE"
+        });
+        if (!response.ok) throw new Error("Error deleting data.");
+        return await response.json();
+    } catch (err) {
+        console.error(err);
+        throw err;
+    }
+}
+
 async function fetchData(url) {
     try {
         const response = await fetch(url)
@@ -14,21 +68,21 @@ async function fetchData(url) {
     }
 }
 
-export async function sendData(url, method = "POST", data = {}) {
-    try {
-        const response = await fetch(url, {
-            method,
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(data)
-        })
-        if (!response.ok) throw new Error("Error sending data.")
-        return await response.json()
-    } catch (err) {
-        console.error(err)
-        throw err
-    }
-}
+// export async function sendData(url, method = "POST", data = {}) {
+//     try {
+//         const response = await fetch(url, {
+//             method,
+//             headers: {'Content-Type': 'application/json'},
+//             body: JSON.stringify(data)
+//         })
+//         if (!response.ok) throw new Error("Error sending data.")
+//         return await response.json()
+//     } catch (err) {
+//         console.error(err)
+//         throw err
+//     }
+// }
 
 export async function fetchAuthorBooks(authorId) {
-    return fetchData(`/api/books?authorId=${authorId}`);
+    return getData(`/api/books?authorId=${authorId}`);
 }

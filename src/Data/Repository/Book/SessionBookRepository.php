@@ -6,8 +6,15 @@ use BookStore\Business\Model\Book\Book;
 use BookStore\Business\Repository\BookRepositoryInterface;
 use BookStore\Infrastructure\Session\SessionManager;
 
+/*
+ * Class containing logic for storing and retrieving Book session data
+ */
+
 class SessionBookRepository implements BookRepositoryInterface
 {
+    /**
+     * Constructs Session Book Repository
+     */
     public function __construct()
     {
         if (!SessionManager::getInstance()->has('books')) {

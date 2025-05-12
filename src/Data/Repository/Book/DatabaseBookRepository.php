@@ -7,6 +7,10 @@ use BookStore\Business\Repository\BookRepositoryInterface;
 use BookStore\Infrastructure\Database\DatabaseConnection;
 use PDOException;
 
+/*
+ * Class containing logic for working with Book database
+ */
+
 class DatabaseBookRepository implements BookRepositoryInterface
 {
     /**

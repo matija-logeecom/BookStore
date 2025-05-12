@@ -6,8 +6,15 @@ use BookStore\Business\Model\Author\Author;
 use BookStore\Business\Repository\AuthorRepositoryInterface;
 use BookStore\Infrastructure\Session\SessionManager;
 
+/*
+ * Class containing logic for storing and retrieving author session data
+ */
+
 class SessionAuthorRepository implements AuthorRepositoryInterface
 {
+    /**
+     * Constructs Session Author Repository
+     */
     public function __construct()
     {
         if (!SessionManager::getInstance()->has('authors')) {
@@ -63,7 +70,6 @@ class SessionAuthorRepository implements AuthorRepositoryInterface
      */
     public function editAuthor(Author $author): bool
     {
-//        $authorIndex = $this->getAuthorIndex($author->getId());
         $authors = SessionManager::getInstance()->get('authors');
 
         if (!isset($authors)) {
@@ -108,25 +114,6 @@ class SessionAuthorRepository implements AuthorRepositoryInterface
 
         return null;
     }
-
-    /**
-     * Retrieves index of author with provided id from current session
-     *
-     * @param $authorId
-     *
-     * @return int|null
-     */
-//    private function getAuthorIndex($authorId): ?int
-//    {
-//        $authors = SessionManager::getInstance()->get('authors');
-//        foreach ($authors as $index => $author) {
-//            if ($author['id'] === $authorId) {
-//                return $index;
-//            }
-//        }
-//
-//        return -1;
-//    }
 
     /**
      * Returns number of books

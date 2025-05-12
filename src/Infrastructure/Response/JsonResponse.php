@@ -2,8 +2,19 @@
 
 namespace BookStore\Infrastructure\Response;
 
+/*
+ * Class for handling JSON response logic
+ */
+
 class JsonResponse extends Response
 {
+    /**
+     * Constructs Json Response instance
+     *
+     * @param mixed $data
+     * @param int $statusCode
+     * @param array $headers
+     */
     public function __construct(mixed $data, int $statusCode = 200, array $headers = [])
     {
         parent::__construct($data, $statusCode, $headers);
