@@ -10,7 +10,7 @@ use BookStore\Business\Service\Book\BookService;
 use BookStore\Business\Service\Book\BookServiceInterface;
 use BookStore\Data\Repository\Author\DatabaseAuthorRepository;
 use BookStore\Data\Repository\Book\DatabaseBookRepository;
-use BookStore\DI\ServiceRegistry;
+use BookStore\Infrastructure\DI\ServiceRegistry;
 use BookStore\Presentation\Controller\AuthorController;
 use BookStore\Presentation\Controller\BookController;
 use Exception;

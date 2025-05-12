@@ -1,6 +1,6 @@
 <?php
 
-namespace BookStore\Presentation\Response;
+namespace BookStore\Infrastructure\Response;
 
 abstract class Response
 {
@@ -79,7 +79,13 @@ abstract class Response
      *
      * @return void
      */
-    abstract public function view(): void;
+    public function view(): void
+    {
+        if (!headers_sent()) {
+            $this->sendStatusCode();
+            $this->sendHeaders();
+        }
+    }
 
     /**
      * Creates not found response
@@ -95,7 +101,7 @@ abstract class Response
      * @param string $message
      * @return self
      */
-    abstract public static function createBadRequest(string $message = "Bad Request."): self;
+    abstract static public function createBadRequest(string $message = "Bad Request."): self;
 
     /**
      * Creates internal server error response
@@ -103,6 +109,6 @@ abstract class Response
      * @param string $message
      * @return self
      */
-    abstract public static function createInternalServerError(string $message =
+    abstract static public function createInternalServerError(string $message =
                                                               "An internal server error occurred."): self;
 }

@@ -4,8 +4,9 @@ namespace BookStore\Presentation\Controller;
 
 use BookStore\Business\Model\Author\Author;
 use BookStore\Business\Service\Author\AuthorService;
-use BookStore\Presentation\Response\HtmlResponse;
-use BookStore\Presentation\Response\Response;
+use BookStore\Infrastructure\Response\HtmlResponse;
+use BookStore\Infrastructure\Response\RedirectionResponse;
+use BookStore\Infrastructure\Response\Response;
 
 class AuthorController
 {
@@ -34,35 +35,36 @@ class AuthorController
      *
      * @return Response
      */
-    public function createAuthor(): Response
+    public function createAuthor(string $firstName = null, string $lastName = null): Response
     {
         $errors = ['firstName' => '', 'lastName' => ''];
-        $firstName = trim($_POST['first_name']) ?? '';
-        $lastName = trim($_POST['last_name']) ?? '';
 
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-//            $path = __DIR__ . "/../../../public/pages/create_author.phtml";
+        // If condition is true, the request is a GET
+        if ($firstName === null && $lastName === null) {
             $path = VIEWS_PATH . "/create_author.phtml";
             return new HtmlResponse($path, variables: [
                 "errors" => $errors,
-                'firstName' => $firstName,
-                'lastName' => $lastName,
+                'firstName' => '',
+                'lastName' => '',
             ]);
         }
 
-        $author = new Author(0, trim($firstName . ' ' . $lastName));
+        $trimmedFirstName = trim($firstName ?? '');
+        $trimmedLastName = trim($lastName ?? '');
+
+        $author = new Author(0, trim($trimmedFirstName . ' ' . $trimmedLastName));
         $this->authorService->addAuthor($author, $errors);
 
         if (!empty($errors['firstName'] || !empty($errors['lastName']))) {
             $path = VIEWS_PATH . "/create_author.phtml";
             return new HtmlResponse($path, variables: [
                 "errors" => $errors,
-                'firstName' => $firstName,
-                'lastName' => $lastName,
+                'firstName' => $trimmedFirstName,
+                'lastName' => $trimmedLastName,
             ]);
         }
 
-        return new HtmlResponse("", statusCode: 303, headers: ['Location' => 'index.php']);
+        return new RedirectionResponse('index.php');
     }
 
     /**
@@ -72,29 +74,32 @@ class AuthorController
      *
      * @return Response
      */
-    public function editAuthor(int $id): Response
+    public function editAuthor(int $id, string $firstName = null, string $lastName = null): Response
     {
         $errors = ['firstName' => '', 'lastName' => ''];
         $author = $this->authorService->getAuthorById($id);
-        $firstName = $author->getFirstName() ?? '';
-        $lastName = $author->getLastName() ?? '';
         if (!$author) {
-            return new HtmlResponse("", statusCode: 303, headers: ['Location' => 'index.php']);
+            return HtmlResponse::createNotFound();
         }
 
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        $currentFirstName = $author->getFirstName() ?? '';
+        $currentLastName = $author->getLastName() ?? '';
+
+        // If condition is true, the request is a GET
+        if ($firstName === null && $lastName === null) {
             $path = VIEWS_PATH . "/edit_author.phtml";
             return new HtmlResponse($path, variables: [
                 'author' => $author,
                 'errors' => $errors,
-                'firstName' => $firstName,
-                'lastName' => $lastName
+                'firstName' => $currentFirstName,
+                'lastName' => $currentLastName
             ]);
         }
 
-        $firstName = trim($_POST['first_name']) ?? '';
-        $lastName = trim($_POST['last_name']) ?? '';
-        $editedAuthor = new Author($id, $firstName . ' ' . $lastName);
+        $trimmedFirstName = trim($firstName ?? '');
+        $trimmedLastName = trim($lastName ?? '');
+
+        $editedAuthor = new Author($id, $trimmedFirstName . ' ' . $trimmedLastName);
         $this->authorService->editAuthor($editedAuthor, $errors);
 
         if (!empty($errors['firstName'] || !empty($errors['lastName']))) {
@@ -102,12 +107,12 @@ class AuthorController
             return new HtmlResponse($path, variables: [
                 'author' => $author,
                 'errors' => $errors,
-                'firstName' => $firstName,
-                'lastName' => $lastName
+                'firstName' => $trimmedFirstName,
+                'lastName' => $trimmedLastName
             ]);
         }
 
-        return new HtmlResponse("", statusCode: 303, headers: ['Location' => 'index.php']);
+        return new RedirectionResponse('index.php', 303);
     }
 
     /**
@@ -117,18 +122,22 @@ class AuthorController
      *
      * @return Response
      */
-    public function deleteAuthor(int $id): Response
+    public function deleteAuthor(int $id, string $confirmationAction = null): Response
     {
-        $fullName = $this->authorService->getAuthorById($id)->getName() ?? '';
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        $author = $this->authorService->getAuthorById($id);
+        if (!$author) {
+            return new RedirectionResponse('index.php');
+        }
+
+        $fullName = $author->getName() ?? '';
+        if ($confirmationAction === null) {
             $path = VIEWS_PATH . "/delete_author.phtml";
             return new HtmlResponse($path, variables: ['fullName' => $fullName, 'authorId' => $id]);
         }
 
-        if ($_POST['action'] === 'delete') {
+        if ($confirmationAction === 'delete') {
             $this->authorService->deleteAuthor($id);
         }
 
-        return new HtmlResponse("", statusCode: 303, headers: ['Location' => 'index.php']);
-    }
+        return new RedirectionResponse('index.php', 303);    }
 }

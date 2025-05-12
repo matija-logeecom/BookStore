@@ -78,6 +78,10 @@ class DatabaseAuthorRepository implements AuthorRepositoryInterface
         $statement->execute(['id' => $authorId]);
         $row = $statement->fetch();
 
+        if (!$row) {
+            return null;
+        }
+
         return new Author((int)$row['id'], $row['name']);
     }
 }

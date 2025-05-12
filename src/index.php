@@ -3,11 +3,11 @@
 require_once __DIR__ . "/../vendor/autoload.php";
 
 use BookStore\Bootstrap;
-use BookStore\DI\ServiceRegistry;
+use BookStore\Infrastructure\DI\ServiceRegistry;
 use BookStore\Presentation\Controller\AuthorController;
 use BookStore\Presentation\Controller\BookController;
-use BookStore\Presentation\Response\HtmlResponse;
-use BookStore\Presentation\Response\JsonResponse;
+use BookStore\Infrastructure\Response\HtmlResponse;
+use BookStore\Infrastructure\Response\JsonResponse;
 
 $basePath = '';
 
@@ -18,11 +18,7 @@ $routePath = str_replace($basePath, '', parse_url($requestUri, PHP_URL_PATH));
 
 try {
     Bootstrap::init();
-} catch (Exception $e) {
-    echo $e->getMessage();
-}
 
-try {
     if (!str_starts_with($routePath, '/api/')) {
         $authorController = ServiceRegistry::get(AuthorController::class);
         $action = $_GET['action'] ?? 'listAuthors';
@@ -33,18 +29,35 @@ try {
                 $authorController->listAuthors()->view();
                 break;
             case 'createAuthor':
-                $authorController->createAuthor()->view();
+                if ($requestMethod === 'POST') {
+                    $firstName = $_POST['first_name'] ?? null;
+                    $lastName = $_POST['last_name'] ?? null;
+                    $authorController->createAuthor($firstName, $lastName)->view();
+                } else {
+                    $authorController->createAuthor()->view();
+                }
                 break;
             case 'editAuthor':
                 if ($id !== null) {
-                    $authorController->editAuthor($id)->view();
+                    if ($requestMethod === 'POST') {
+                        $firstName = $_POST['first_name'] ?? null;
+                        $lastName = $_POST['last_name'] ?? null;
+                        $authorController->editAuthor($id, $firstName, $lastName)->view();
+                    } else {
+                        $authorController->editAuthor($id)->view();
+                    }
                 } else {
                     HtmlResponse::createBadRequest()->view();
                 }
                 break;
             case 'deleteAuthor':
                 if ($id !== null) {
-                    $authorController->deleteAuthor($id)->view();
+                    if ($requestMethod === 'POST') {
+                        $postAction = $_POST['action'] ?? null;
+                        $authorController->deleteAuthor($id, $postAction)->view();
+                    } else {
+                        $authorController->deleteAuthor($id)->view();
+                    }
                 } else {
                     HtmlResponse::createBadRequest()->view();
                 }

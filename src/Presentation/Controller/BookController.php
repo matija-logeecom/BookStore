@@ -5,7 +5,7 @@ namespace BookStore\Presentation\Controller;
 use BookStore\Business\Model\Book\Book;
 use BookStore\Business\Service\Author\AuthorService;
 use BookStore\Business\Service\Book\BookService;
-use BookStore\Presentation\Response\JsonResponse;
+use BookStore\Infrastructure\Response\JsonResponse;
 
 class BookController
 {

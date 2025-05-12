@@ -1,6 +1,6 @@
 <?php
 
-namespace BookStore\Presentation\Response;
+namespace BookStore\Infrastructure\Response;
 
 class JsonResponse extends Response
 {
@@ -18,8 +18,8 @@ class JsonResponse extends Response
      */
     public function view(): void
     {
-        $this->sendHeaders();
-        $this->sendStatusCode();
+        parent::view();
+
         echo json_encode($this->body);
     }
 

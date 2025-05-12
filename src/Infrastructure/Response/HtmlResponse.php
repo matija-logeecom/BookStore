@@ -1,6 +1,6 @@
 <?php
 
-namespace BookStore\Presentation\Response;
+namespace BookStore\Infrastructure\Response;
 
 class HtmlResponse extends Response
 {
@@ -16,6 +16,9 @@ class HtmlResponse extends Response
             $this->headers['Content-Type'] = 'text/html; charset=utf-8';
         }
 
+        $this->sendHeaders();
+        $this->sendStatusCode();
+
         $this->variables = $variables;
         $this->path = $html;
     }
@@ -25,6 +28,8 @@ class HtmlResponse extends Response
      */
     public function view(): void
     {
+        parent::view();
+
         extract($this->variables);
 
         ob_start();
@@ -33,8 +38,6 @@ class HtmlResponse extends Response
         }
         $content = ob_get_clean();
 
-        $this->sendHeaders();
-        $this->sendStatusCode();
         echo $content;
     }
 
@@ -43,7 +46,15 @@ class HtmlResponse extends Response
      */
     public static function createNotFound(string $message = "Page not found."): self
     {
-        return new self("<h1>404 Not Found</h1><p>" . htmlspecialchars($message) . "</p>", statusCode: 404);
+        $errorPagePath = VIEWS_PATH . "/server_error.phtml";
+        $variables = [
+            'errorTitle' => '404 - Page Not Found',
+            'errorHeadline' => '404 - Page Not Found',
+            'message' => $message,
+            'showGoBackLink' => true,
+        ];
+
+        return new self($errorPagePath, $variables, 404);
     }
 
     /**
@@ -51,7 +62,15 @@ class HtmlResponse extends Response
      */
     public static function createBadRequest(string $message = "Bad Request."): self
     {
-        return new self("<h1>400 Bad Request</h1><p>" . htmlspecialchars($message) . "</p>", statusCode: 400);
+        $errorPagePath = VIEWS_PATH . "/server_error.phtml";
+        $variables = [
+            'errorTitle' => '400 - Bad Request',
+            'errorHeadline' => '404 - Bad Request',
+            'message' => $message,
+            'showGoBackLink' => true,
+        ];
+
+        return new self($errorPagePath, $variables, 400);
     }
 
     /**
@@ -59,8 +78,14 @@ class HtmlResponse extends Response
      */
     public static function createInternalServerError(string $message = "Bad Request."): self
     {
-        return new self("<h1>500 Internal Server Error</h1><p>"
-            . htmlspecialchars($message)
-            . "</p>", statusCode: 500);
+        $errorPagePath = VIEWS_PATH . "/server_error.phtml";
+        $variables = [
+            'errorTitle' => '500 - Internal Server Error',
+            'errorHeadline' => '500 - Internal Server Error',
+            'message' => $message,
+            'showGoBackLink' => false,
+        ];
+
+        return new self($errorPagePath, $variables, 500);
     }
 }
