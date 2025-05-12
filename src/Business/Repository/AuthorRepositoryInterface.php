@@ -22,27 +22,27 @@ interface AuthorRepositoryInterface
      *
      * @param Author $author
      *
-     * @return void
+     * @return bool
      */
-    public function addAuthor(Author $author): void;
+    public function addAuthor(Author $author): bool;
 
     /**
      * Changes the name of the author with the provided ID
      *
      * @param Author $author
      *
-     * @return void
+     * @return bool
      */
-    public function editAuthor(Author $author): void;
+    public function editAuthor(Author $author): bool;
 
     /**
      * Deletes author with the provided ID
      *
      * @param int $authorId
      *
-     * @return void
+     * @return bool
      */
-    public function deleteAuthor(int $authorId): void;
+    public function deleteAuthor(int $authorId): bool;
 
     /**
      * Retrieves an author with provided ID

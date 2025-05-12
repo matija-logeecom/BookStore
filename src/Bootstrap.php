@@ -9,7 +9,9 @@ use BookStore\Business\Service\Author\AuthorServiceInterface;
 use BookStore\Business\Service\Book\BookService;
 use BookStore\Business\Service\Book\BookServiceInterface;
 use BookStore\Data\Repository\Author\DatabaseAuthorRepository;
+use BookStore\Data\Repository\Author\SessionAuthorRepository;
 use BookStore\Data\Repository\Book\DatabaseBookRepository;
+use BookStore\Data\Repository\Book\SessionBookRepository;
 use BookStore\Infrastructure\DI\ServiceRegistry;
 use BookStore\Presentation\Controller\AuthorController;
 use BookStore\Presentation\Controller\BookController;
@@ -37,11 +39,11 @@ class Bootstrap
     private static function registerRepositories(): void
     {
         ServiceRegistry::set(BookRepositoryInterface::class,
-            new DatabaseBookRepository()
+            new SessionBookRepository()
         );
 
         ServiceRegistry::set(AuthorRepositoryInterface::class,
-            new DatabaseAuthorRepository()
+            new SessionAuthorRepository()
         );
     }
 
@@ -74,8 +76,7 @@ class Bootstrap
     private static function registerControllers(): void
     {
         ServiceRegistry::set(BookController::class,
-            new BookController(ServiceRegistry::get(BookServiceInterface::class),
-                ServiceRegistry::get(AuthorServiceInterface::class))
+            new BookController(ServiceRegistry::get(BookServiceInterface::class))
         );
 
         ServiceRegistry::set(AuthorController::class,

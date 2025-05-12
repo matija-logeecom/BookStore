@@ -22,7 +22,7 @@ class SessionBookRepository implements BookRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function getBooksByAuthorId(int $authorId): array
+    public function getBooksByAuthorId(int $authorId): ?array
     {
         $authorBooks = [];
         foreach (SessionManager::getInstance()->get('books') as $book) {

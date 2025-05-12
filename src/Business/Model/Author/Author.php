@@ -52,7 +52,7 @@ class Author
      */
     public function getLastName(): string
     {
-        return explode(' ', $this->name)[1];
+        return explode(' ', $this->name)[1] ?? '';
     }
 
     /**

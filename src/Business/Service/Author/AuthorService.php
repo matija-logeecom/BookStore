@@ -28,38 +28,44 @@ class AuthorService implements AuthorServiceInterface
     /**
      * @inheritDoc
      */
-    public function addAuthor(Author $author, array &$errors): void
+    public function addAuthor(Author $author, array &$errors): bool
     {
         if (!$this->validateName($author, $errors)) {
-            return;
+            return false;
         }
 
-        $this->authorRepository->addAuthor($author);
+        return $this->authorRepository->addAuthor($author);
     }
 
     /**
      * @inheritDoc
      */
-    public function editAuthor(Author $author, &$errors): void
+    public function editAuthor(Author $author, &$errors): bool
     {
-        if (!$this->validateName($author, $errors)) {
-            return;
+        if (!$this->validateName($author, $errors) || !$this->validateExistence($author->getId())) {
+            return false;
         }
 
-        $this->authorRepository->editAuthor($author);
+       return $this->authorRepository->editAuthor($author);
     }
 
     /**
      * @inheritDoc
      */
-    public function deleteAuthor(int $authorId): void
+    public function deleteAuthor(int $authorId): bool
     {
         $books = $this->bookRepository->getBooksByAuthorId($authorId);
+        if (!$this->validateExistence($authorId)) {
+            return false;
+        }
         foreach ($books as $book) {
-            $this->bookRepository->deleteBook($book->getId());
+            $deleted = $this->bookRepository->deleteBook($book->getId());
+            if (!$deleted) {
+                return false;
+            }
         }
 
-        $this->authorRepository->deleteAuthor($authorId);
+        return $this->authorRepository->deleteAuthor($authorId);
     }
 
     /**
@@ -73,7 +79,7 @@ class AuthorService implements AuthorServiceInterface
     /**
      * Checks whether firstName and lastName are correct and changes errors array accordingly
      *
-     * @param \BookStore\Business\Model\Author\Author $author
+     * @param Author $author
      * @param $errors
      *
      * @return bool
@@ -100,5 +106,11 @@ class AuthorService implements AuthorServiceInterface
         }
 
         return (empty($errors['firstName']) && empty($errors['lastName']));
+    }
+
+    private function validateExistence(int $authorId): bool
+    {
+        $authorRetrieved = $this->authorRepository->getAuthorById($authorId);
+        return (bool)$authorRetrieved;
     }
 }

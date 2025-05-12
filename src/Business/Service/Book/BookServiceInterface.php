@@ -12,9 +12,9 @@ interface BookServiceInterface
      *
      * @param Author $author
      *
-     * @return Book[]
+     * @return Book[]|null
      */
-    public function getBooksByAuthor(Author $author): array;
+    public function getBooksByAuthor(Author $author): ?array;
 
     /**
      * Retrieves a single book by its ID.

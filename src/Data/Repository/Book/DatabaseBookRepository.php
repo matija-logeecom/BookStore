@@ -12,30 +12,53 @@ class DatabaseBookRepository implements BookRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function getBooksByAuthorId(int $authorId): array
+    public function getBooksByAuthorId(int $authorId): ?array
     {
+        $conn = DatabaseConnection::getInstance()->getConnection();
+
+        $checkAuthorQuery = "SELECT 1 FROM Authors WHERE id = :id LIMIT 1";
+        try {
+            $checkStmt = $conn->prepare($checkAuthorQuery);
+            $checkStmt->execute(['id' => $authorId]);
+
+            if ($checkStmt->fetchColumn() === false) {
+                return null;
+            }
+        } catch (PDOException $e) {
+            error_log("Database error checking author existence: " . $e->getMessage());
+
+            return null;
+        }
+
         $query = "
             SELECT
                 id, title, year, author_id
-            FROM 
+            FROM
                 Books
-            WHERE 
+            WHERE
                 author_id = :author_id ORDER BY year DESC, title ASC";
-        $statement = DatabaseConnection::getInstance()->getConnection()->prepare($query);
-        $statement->execute(['author_id' => $authorId]);
-        $rows = $statement->fetchAll();
+        try {
+            $statement = $conn->prepare($query);
+            $statement->execute(['author_id' => $authorId]);
+            $rows = $statement->fetchAll();
 
-        $books = [];
-        foreach ($rows as $row) {
-            $books[] = new Book(
-                (int)$row['id'],
-                $row['title'],
-                (int)$row['year'],
-                (int)$row['author_id']
-            );
+            $books = [];
+            foreach ($rows as $row) {
+                $books[] = new Book(
+                    (int)$row['id'],
+                    $row['title'],
+                    (int)$row['year'],
+                    (int)$row['author_id']
+                );
+            }
+
+            return $books;
+
+        } catch (PDOException $e) {
+            error_log("Database error fetching books by author: " . $e->getMessage());
+
+            return [];
         }
-
-        return $books;
     }
 
     /**
@@ -44,16 +67,22 @@ class DatabaseBookRepository implements BookRepositoryInterface
     public function findBookById(int $bookId): ?Book
     {
         $query = "SELECT id, title, year, author_id FROM Books WHERE id = :id";
-        $statement = DatabaseConnection::getInstance()->getConnection()->prepare($query);
-        $statement->execute(['id' => $bookId]);
-        $row = $statement->fetch();
+        try {
+            $statement = DatabaseConnection::getInstance()->getConnection()->prepare($query);
+            $statement->execute(['id' => $bookId]);
+            $row = $statement->fetch();
 
-        return new Book(
-            (int)$row['id'],
-            $row['title'],
-            (int)$row['year'],
-            (int)$row['author_id']
-        );
+            return new Book(
+                (int)$row['id'],
+                $row['title'],
+                (int)$row['year'],
+                (int)$row['author_id']
+            );
+        } catch (PDOException $e) {
+            error_log($e->getMessage());
+
+            return null;
+        }
     }
 
     /**
@@ -75,8 +104,11 @@ class DatabaseBookRepository implements BookRepositoryInterface
                 return $this->findBookById((int)$newBookId);
             }
         } catch (PDOException $e) {
+            error_log($e->getMessage());
+
             return null;
         }
+
         return null;
     }
 
@@ -103,8 +135,11 @@ class DatabaseBookRepository implements BookRepositoryInterface
                 return $this->findBookById($book->getId());
             }
         } catch (PDOException $e) {
+            error_log($e->getMessage());
+
             return null;
         }
+
         return null;
     }
 
@@ -119,6 +154,8 @@ class DatabaseBookRepository implements BookRepositoryInterface
             $statement->execute(['id' => $bookId]);
             return $statement->rowCount() > 0;
         } catch (PDOException $e) {
+            error_log($e->getMessage());
+
             return false;
         }
     }

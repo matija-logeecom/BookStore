@@ -33,21 +33,22 @@ class AuthorController
     /**
      * Adds an author to current session
      *
+     * @param array $errors
      * @return Response
      */
+
+    public function createAuthorPage(array $errors): Response
+    {
+        $path = VIEWS_PATH . "/create_author.phtml";
+        return new HtmlResponse($path, variables: [
+            "errors" => $errors,
+            'firstName' => '',
+            'lastName' => '',
+        ]);
+    }
     public function createAuthor(string $firstName = null, string $lastName = null): Response
     {
         $errors = ['firstName' => '', 'lastName' => ''];
-
-        // If condition is true, the request is a GET
-        if ($firstName === null && $lastName === null) {
-            $path = VIEWS_PATH . "/create_author.phtml";
-            return new HtmlResponse($path, variables: [
-                "errors" => $errors,
-                'firstName' => '',
-                'lastName' => '',
-            ]);
-        }
 
         $trimmedFirstName = trim($firstName ?? '');
         $trimmedLastName = trim($lastName ?? '');
@@ -56,87 +57,89 @@ class AuthorController
         $this->authorService->addAuthor($author, $errors);
 
         if (!empty($errors['firstName'] || !empty($errors['lastName']))) {
-            $path = VIEWS_PATH . "/create_author.phtml";
-            return new HtmlResponse($path, variables: [
-                "errors" => $errors,
-                'firstName' => $trimmedFirstName,
-                'lastName' => $trimmedLastName,
-            ]);
+            return $this->createAuthorPage($errors);
         }
 
         return new RedirectionResponse('index.php');
+    }
+
+    public function editAuthorPage(int $id, array $errors): Response
+    {
+        $author = $this->authorService->getAuthorById($id);
+        if (!$author) {
+            return HtmlResponse::createInternalServerError();
+        }
+
+        $currentFirstName = $author->getFirstName();
+        $currentLastName = $author->getLastName();
+
+        $path = VIEWS_PATH . "/edit_author.phtml";
+        return new HtmlResponse($path, variables: [
+            'author' => $author,
+            'errors' => $errors,
+            'firstName' => $currentFirstName,
+            'lastName' => $currentLastName
+        ]);
     }
 
     /**
      * Changes author name with provided id in current session
      *
      * @param int $id
+     * @param string|null $firstName
+     * @param string|null $lastName
      *
      * @return Response
      */
     public function editAuthor(int $id, string $firstName = null, string $lastName = null): Response
     {
-        $errors = ['firstName' => '', 'lastName' => ''];
-        $author = $this->authorService->getAuthorById($id);
-        if (!$author) {
-            return HtmlResponse::createNotFound();
-        }
-
-        $currentFirstName = $author->getFirstName() ?? '';
-        $currentLastName = $author->getLastName() ?? '';
-
-        // If condition is true, the request is a GET
-        if ($firstName === null && $lastName === null) {
-            $path = VIEWS_PATH . "/edit_author.phtml";
-            return new HtmlResponse($path, variables: [
-                'author' => $author,
-                'errors' => $errors,
-                'firstName' => $currentFirstName,
-                'lastName' => $currentLastName
-            ]);
-        }
+        $errors = ['firstName' => '', 'lastName' => '', 'exists' => ''];
 
         $trimmedFirstName = trim($firstName ?? '');
         $trimmedLastName = trim($lastName ?? '');
 
         $editedAuthor = new Author($id, $trimmedFirstName . ' ' . $trimmedLastName);
-        $this->authorService->editAuthor($editedAuthor, $errors);
+        $success = $this->authorService->editAuthor($editedAuthor, $errors);
 
-        if (!empty($errors['firstName'] || !empty($errors['lastName']))) {
-            $path = VIEWS_PATH . "/edit_author.phtml";
-            return new HtmlResponse($path, variables: [
-                'author' => $author,
-                'errors' => $errors,
-                'firstName' => $trimmedFirstName,
-                'lastName' => $trimmedLastName
-            ]);
+        if (!$success) {
+            return HtmlResponse::createInternalServerError();
+        }
+
+        if (!empty($errors['firstName']) || !empty($errors['lastName']) || !empty($errors['exists'])) {
+            return $this->editAuthorPage($id, $errors);
         }
 
         return new RedirectionResponse('index.php', 303);
+    }
+
+    public function deleteAuthorPage(int $id): Response
+    {
+        $author = $this->authorService->getAuthorById($id);
+        if (!$author) {
+            return HtmlResponse::createInternalServerError();
+        }
+
+        $fullName = $author->getName() ?? '';
+
+        $path = VIEWS_PATH . "/delete_author.phtml";
+        return new HtmlResponse($path, variables: ['fullName' => $fullName, 'authorId' => $id]);
     }
 
     /**
      * Deletes an author with provided id from current session
      *
      * @param int $id
+     * @param string $action
      *
      * @return Response
      */
-    public function deleteAuthor(int $id, string $confirmationAction = null): Response
+    public function deleteAuthor(int $id, string $action): Response
     {
-        $author = $this->authorService->getAuthorById($id);
-        if (!$author) {
-            return new RedirectionResponse('index.php');
-        }
-
-        $fullName = $author->getName() ?? '';
-        if ($confirmationAction === null) {
-            $path = VIEWS_PATH . "/delete_author.phtml";
-            return new HtmlResponse($path, variables: ['fullName' => $fullName, 'authorId' => $id]);
-        }
-
-        if ($confirmationAction === 'delete') {
-            $this->authorService->deleteAuthor($id);
+        if ($action === 'delete') {
+            $success = $this->authorService->deleteAuthor($id);
+            if (!$success) {
+                return HtmlResponse::createInternalServerError();
+            }
         }
 
         return new RedirectionResponse('index.php', 303);    }

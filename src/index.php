@@ -34,7 +34,8 @@ try {
                     $lastName = $_POST['last_name'] ?? null;
                     $authorController->createAuthor($firstName, $lastName)->view();
                 } else {
-                    $authorController->createAuthor()->view();
+                    $errors = ['firstName' => '', 'lastName' => ''];
+                    $authorController->createAuthorPage($errors)->view();
                 }
                 break;
             case 'editAuthor':
@@ -44,7 +45,8 @@ try {
                         $lastName = $_POST['last_name'] ?? null;
                         $authorController->editAuthor($id, $firstName, $lastName)->view();
                     } else {
-                        $authorController->editAuthor($id)->view();
+                        $errors = ['firstName' => '', 'lastName' => ''];
+                        $authorController->editAuthorPage($id, $errors)->view();
                     }
                 } else {
                     HtmlResponse::createBadRequest()->view();
@@ -53,10 +55,10 @@ try {
             case 'deleteAuthor':
                 if ($id !== null) {
                     if ($requestMethod === 'POST') {
-                        $postAction = $_POST['action'] ?? null;
-                        $authorController->deleteAuthor($id, $postAction)->view();
+                        $deleteAction = $_POST['action'] ?? 'delete';
+                        $authorController->deleteAuthor($id, $deleteAction)->view();
                     } else {
-                        $authorController->deleteAuthor($id)->view();
+                        $authorController->deleteAuthorPage($id)->view();
                     }
                 } else {
                     HtmlResponse::createBadRequest()->view();
@@ -71,7 +73,8 @@ try {
 
     // GET /api/books
     if ($requestMethod === 'GET' && $routePath === '/api/books') {
-        $bookController->getBooksByAuthor()->view();
+        $authorId = $_GET['authorId'] ?? null;
+        $bookController->getBooksByAuthor($authorId)->view();
     } // POST /api/books/create
     elseif ($requestMethod === 'POST' && $routePath === '/api/books/create') {
         $bookController->createBook()->view();

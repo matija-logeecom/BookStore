@@ -14,23 +14,23 @@ interface BookRepositoryInterface
      *
      * @param int $authorId The ID of the author.
      *
-     * @return Book[] A list of books, each as an associative array.
+     * @return Book[]|null A list of books, each as an associative array.
      */
-    public function getBooksByAuthorId(int $authorId): array;
+    public function getBooksByAuthorId(int $authorId): ?array;
 
     /**
      * Finds a single book by its ID.
      *
      * @param int $bookId The ID of the book.
      *
-     * @return \BookStore\Business\Model\Book\Book|null The book data as an associative array, or null if not found.
+     * @return Book|null The book data as an associative array, or null if not found.
      */
     public function findBookById(int $bookId): ?Book;
 
     /**
      * Adds a new book.
      *
-     * @param \BookStore\Business\Model\Book\Book $book
+     * @param Book $book
      *
      * @return Book|null The newly created book data as an associative array (including its new ID), or null on failure.
      */
@@ -39,7 +39,7 @@ interface BookRepositoryInterface
     /**
      * Updates an existing book.
      *
-     * @param \BookStore\Business\Model\Book\Book $book
+     * @param Book $book
      *
      * @return Book|null The updated book data as an associative array, or null on failure or if not found.
      */

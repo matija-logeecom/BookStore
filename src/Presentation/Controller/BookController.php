@@ -2,32 +2,28 @@
 
 namespace BookStore\Presentation\Controller;
 
+use BookStore\Business\Model\Author\Author;
 use BookStore\Business\Model\Book\Book;
-use BookStore\Business\Service\Author\AuthorService;
 use BookStore\Business\Service\Book\BookService;
 use BookStore\Infrastructure\Response\JsonResponse;
 
 class BookController
 {
     private BookService $bookService;
-    private AuthorService $authorService;
 
-    public function __construct(BookService $bookService, AuthorService $authorService)
+    public function __construct(BookService $bookService)
     {
         $this->bookService = $bookService;
-        $this->authorService = $authorService;
     }
 
-    public function getBooksByAuthor(): JsonResponse
+    public function getBooksByAuthor(int $authorId): JsonResponse
     {
-        $authorId = $_GET['authorId'] ?? null;
-        $author = $this->authorService->getAuthorById($authorId);
-
-        if (!$authorId || !$author) {
-            return JsonResponse::createNotFound();
-        }
+        $author = new Author($authorId, '');
 
         $books = $this->bookService->getBooksByAuthor($author);
+        if (!isset($books)) {
+            return JsonResponse::createNotFound();
+        }
 
         return new JsonResponse($books);
     }
@@ -68,11 +64,6 @@ class BookController
             return JsonResponse::createBadRequest();
         }
 
-        if (!$this->bookService->getBookById($id)) {
-            return JsonResponse::createNotFound();
-        }
-
-        // Success
         if ($updatedBook) {
             return new JsonResponse(['success' => true, 'book' => $updatedBook]);
         }

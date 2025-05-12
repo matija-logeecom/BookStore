@@ -37,42 +37,62 @@ class SessionAuthorRepository implements AuthorRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function addAuthor(Author $author): void
+    public function addAuthor(Author $author): bool
     {
         $authors = SessionManager::getInstance()->get('authors');
         $currentId = SessionManager::getInstance()->get('currentId');
+
+        if (!$currentId) {
+            return false;
+        }
 
         $newAuthor = [
             'id' => $currentId,
             'name' => $author->getName(),
         ];
 
-        $authors[] = $newAuthor;
+        $authors[$currentId] = $newAuthor;
         SessionManager::getInstance()->set('authors', $authors);
         SessionManager::getInstance()->set('currentId', $currentId + 1);
+
+        return true;
     }
 
     /**
      * @inheritDoc
      */
-    public function editAuthor(Author $author): void
+    public function editAuthor(Author $author): bool
     {
-        $authorIndex = $this->getAuthorIndex($author->getId());
+//        $authorIndex = $this->getAuthorIndex($author->getId());
         $authors = SessionManager::getInstance()->get('authors');
 
-        $authors[$authorIndex]['name'] = $author->getName();
+        if (!isset($authors)) {
+            return false;
+        }
+
+        $authors[$author->getId()]['name'] = $author->getName();
         SessionManager::getInstance()->set('authors', $authors);
+
+        return true;
     }
 
     /**
      * @inheritDoc
      */
-    public function deleteAuthor(int $authorId): void
+    public function deleteAuthor(int $authorId): bool
     {
+        $authors = SessionManager::getInstance()->get('authors');
         $filteredAuthors = array_filter(
-            SessionManager::getInstance()->get('authors'), fn($a) => $a['id'] !== $authorId
+            $authors, fn($a) => $a['id'] !== $authorId
         );
+
+        if (count($filteredAuthors) === count($authors)) {
+            return false;
+        }
+
         SessionManager::getInstance()->set('authors', $filteredAuthors);
+
+        return true;
     }
 
     /**
@@ -80,9 +100,13 @@ class SessionAuthorRepository implements AuthorRepositoryInterface
      */
     public function getAuthorById(int $authorId): ?Author
     {
-        $authors = $this->getAll();
+        $authorData = SessionManager::getInstance()->get('authors')[$authorId] ?? null;
+        if ($authorData !== null) {
+            $bookCount = $this->bookCount($authorId);
+            return new Author($authorId, $authorData['name'], $bookCount);
+        }
 
-        return current(array_filter($authors, fn($a) => $a->getId() === $authorId));
+        return null;
     }
 
     /**
@@ -92,17 +116,17 @@ class SessionAuthorRepository implements AuthorRepositoryInterface
      *
      * @return int|null
      */
-    private function getAuthorIndex($authorId): ?int
-    {
-        $authors = SessionManager::getInstance()->get('authors');
-        foreach ($authors as $index => $author) {
-            if ($author['id'] === $authorId) {
-                return $index;
-            }
-        }
-
-        return -1;
-    }
+//    private function getAuthorIndex($authorId): ?int
+//    {
+//        $authors = SessionManager::getInstance()->get('authors');
+//        foreach ($authors as $index => $author) {
+//            if ($author['id'] === $authorId) {
+//                return $index;
+//            }
+//        }
+//
+//        return -1;
+//    }
 
     /**
      * Returns number of books
