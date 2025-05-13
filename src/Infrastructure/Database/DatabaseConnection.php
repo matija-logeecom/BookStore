@@ -18,13 +18,17 @@ class DatabaseConnection
      */
     private function __construct()
     {
-        $dsn = 'mysql:host=localhost;dbname=BookStore';
+        $dbHost = getenv('DB_HOST') ?: $_ENV['APP_DB_HOST'];
+        $dbName = getenv('DB_NAME') ?: $_ENV['APP_DB_NAME'];
+        $dbUser = getenv('DB_USER') ?: $_ENV['APP_DB_USER'];
+        $dbPassword = getenv('DB_PASSWORD') ?: $_ENV['APP_DB_PASSWORD'];
+        $dsn = "mysql:host={$dbHost};dbname={$dbName}";
 
         try {
             $this->connection = new PDO(
                 $dsn,
-                'root',
-                'shinigami123',
+                $dbUser,
+                $dbPassword,
                 [
                     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,

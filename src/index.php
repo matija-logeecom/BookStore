@@ -16,6 +16,9 @@ $requestUri = $_SERVER['REQUEST_URI'];
 
 $routePath = str_replace($basePath, '', parse_url($requestUri, PHP_URL_PATH));
 
+$dotenv = Dotenv\Dotenv::createImmutable(PROJECT_ROOT);
+$dotenv->load();
+
 try {
     Bootstrap::init();
 
