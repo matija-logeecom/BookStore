@@ -97,10 +97,9 @@ class BookService implements BookServiceInterface
         }
         if (!is_numeric($yearInput)) {
             $errors['year'] = "Year must be a number.";
-        } else {
-            if ((int)$yearInput < -5000 || (int)$yearInput > 999999 || (int)$yearInput === 0) {
-                $errors['year'] = "Please enter a valid publication year.";
-            }
+        }
+        if ((int)$yearInput < -5000 || (int)$yearInput > 999999 || (int)$yearInput === 0) {
+            $errors['year'] = "Please enter a valid publication year.";
         }
 
         $authorId = $book->getAuthorId();

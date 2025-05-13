@@ -124,13 +124,8 @@ class SessionAuthorRepository implements AuthorRepositoryInterface
      */
     private function bookCount(int $authorId): int
     {
-        $bookCounter = 0;
-        foreach (SessionManager::getInstance()->get('books') as $book) {
-            if ($book['author_id'] === $authorId) {
-                $bookCounter++;
-            }
-        }
+        $books = SessionManager::getInstance()->get('books');
 
-        return $bookCounter;
+        return count(array_filter($books, fn($b) => $b['author_id'] === $authorId));
     }
 }

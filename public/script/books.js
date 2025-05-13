@@ -1,4 +1,4 @@
-import {fetchAuthorBooks, getData, postData, deleteData, putData, getQueryParameter} from './ajax.js'
+import {getData, postData, deleteData, putData, getQueryParameter} from './ajax.js'
 
 document.addEventListener('DOMContentLoaded', () => {
     const appContainer = document.getElementById('app-container')
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const authorId = getQueryParameter('author_id')
 
     function loadBooks() {
-        fetchAuthorBooks(authorId)
+        getData(`/api/books?authorId=${authorId}`)
             .then(books => renderBooks(books))
             .catch(err => {
                 console.error('Error loading books:', err)

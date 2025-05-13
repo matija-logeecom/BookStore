@@ -166,15 +166,18 @@ class AuthorController
      *
      * @return Response
      */
-    public function deleteAuthor(int $id, string $action): Response
+    public function deleteAuthor(int $id): Response
     {
-        if ($action === 'delete') {
-            $success = $this->authorService->deleteAuthor($id);
-            if (!$success) {
-                return HtmlResponse::createInternalServerError();
-            }
+        $success = $this->authorService->deleteAuthor($id);
+        if (!$success) {
+            return HtmlResponse::createInternalServerError();
         }
 
+        return new RedirectionResponse('index.php', 303);
+    }
+
+    public function cancelDeleteAuthor(): Response
+    {
         return new RedirectionResponse('index.php', 303);
     }
 }

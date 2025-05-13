@@ -56,7 +56,3 @@ export async function deleteData(url) {
         throw err;
     }
 }
-
-export async function fetchAuthorBooks(authorId) {
-    return getData(`/api/books?authorId=${authorId}`);
-}

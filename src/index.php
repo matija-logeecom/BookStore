@@ -57,10 +57,13 @@ try {
                 break;
             case 'deleteAuthor':
                 if ($id !== null) {
-                    if ($requestMethod === 'POST') {
-                        $deleteAction = $_POST['action'] ?? 'delete';
-                        $authorController->deleteAuthor($id, $deleteAction)->view();
-                    } else {
+                    if ($requestMethod === 'POST' && $_POST['action'] === 'delete') {
+                        $authorController->deleteAuthor($id)->view();
+                    }
+                    if ($requestMethod === 'POST' && $_POST['action'] === 'cancel') {
+                        $authorController->cancelDeleteAuthor()->view();
+                    }
+                    if ($requestMethod === 'GET') {
                         $authorController->deleteAuthorPage($id)->view();
                     }
                 } else {
